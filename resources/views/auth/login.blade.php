@@ -2,7 +2,7 @@
 
 <div class="card mt-5" style="width: 500px; margin: 0 auto;">
     <div class="col-11 d-flex">
-        <img style="width:440px; margin: 0 auto" src="{{ url('/') }}/img/print_logo.png" />
+        <img style="width:440px; margin: 0 auto" src="{{ url('/') }}/img/logo.png" />
     </div>
     <div class="card-header">
         <h3>Login</h3>

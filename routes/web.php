@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,3 +30,19 @@ Route::get('logout', [AuthController::class, 'logout']);
 Route::get('/dashboard',[DashboardController::class, 'index'])->middleware('isLoggedIn');
 Route::get('/unauthorized',[DashboardController::class, 'unauthorized'])->middleware('isLoggedIn');
 
+
+
+
+// ------------------------- Category Routes ------------------------
+
+Route::group(['prefix' => 'category','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('list', [CategoryController::class, 'show']);
+    Route::get('create', [CategoryController::class, 'create']);
+    Route::post('create', [CategoryController::class, 'store']);
+    Route::get('delete/{id}', [CategoryController::class, 'delete']);
+    Route::get('edit/{id}', [CategoryController::class, 'edit']);
+    Route::post('update/{id}', [CategoryController::class, 'update']);
+
+    // APIs
+    Route::get('getList', [CategoryController::class, 'getList']);
+});
