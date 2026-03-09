@@ -75,6 +75,18 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="#attributesSubmenu" data-bs-toggle="collapse" aria-expanded="false"
+                            class="dropdown-toggle">Attributes </a>
+                        <ul class="collapse list-unstyled" id="attributesSubmenu">
+                            <li>
+                                <a href="{{ url('/attributes/create') }}">Add Attribute</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/attributes/list') }}">Attributes</a>
+                            </li>
+                        </ul>
+                    </li>
 
                     <li>
                         <a href="{{ url('/logout') }}">Logout</a>

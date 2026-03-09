@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\AttributesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,4 +46,18 @@ Route::group(['prefix' => 'category','middleware' => ['isLoggedIn','roleCheck:Ad
 
     // APIs
     Route::get('getList', [CategoryController::class, 'getList']);
+});
+
+// ------------------------- Attributes Routes ------------------------
+
+Route::group(['prefix' => 'attributes','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('list', [AttributesController::class, 'show']);
+    Route::get('create', [AttributesController::class, 'create']);
+    Route::post('create', [AttributesController::class, 'store']);
+    Route::get('delete/{id}', [AttributesController::class, 'delete']);
+    Route::get('edit/{id}', [AttributesController::class, 'edit']);
+    Route::post('update/{id}', [AttributesController::class, 'update']);
+
+    // APIs
+    Route::get('getList', [AttributesController::class, 'getList']);
 });
