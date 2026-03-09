@@ -76,6 +76,18 @@
                         </ul>
                     </li>
                     <li>
+                        <a href="#companySubmenu" data-bs-toggle="collapse" aria-expanded="false"
+                            class="dropdown-toggle">Company </a>
+                        <ul class="collapse list-unstyled" id="companySubmenu">
+                            <li>
+                                <a href="{{ url('/company/create') }}">Add Company</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/company/list') }}">Companies</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
                         <a href="#attributesSubmenu" data-bs-toggle="collapse" aria-expanded="false"
                             class="dropdown-toggle">Attributes </a>
                         <ul class="collapse list-unstyled" id="attributesSubmenu">

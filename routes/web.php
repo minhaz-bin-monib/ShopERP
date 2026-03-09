@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AttributesController;
+use App\Http\Controllers\CompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,4 +61,18 @@ Route::group(['prefix' => 'attributes','middleware' => ['isLoggedIn','roleCheck:
 
     // APIs
     Route::get('getList', [AttributesController::class, 'getList']);
+});
+
+// ------------------------- Company Routes ------------------------
+
+Route::group(['prefix' => 'company','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('list', [CompanyController::class, 'show']);
+    Route::get('create', [CompanyController::class, 'create']);
+    Route::post('create', [CompanyController::class, 'store']);
+    Route::get('delete/{id}', [CompanyController::class, 'delete']);
+    Route::get('edit/{id}', [CompanyController::class, 'edit']);
+    Route::post('update/{id}', [CompanyController::class, 'update']);
+
+    // APIs
+    Route::get('getList', [CompanyController::class, 'getList']);
 });
