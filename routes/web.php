@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AttributesController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,4 +76,18 @@ Route::group(['prefix' => 'company','middleware' => ['isLoggedIn','roleCheck:Adm
 
     // APIs
     Route::get('getList', [CompanyController::class, 'getList']);
+});
+
+// ------------------------- Customer Routes ------------------------
+
+Route::group(['prefix' => 'customer','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('list', [CustomerController::class, 'show']);
+    Route::get('create', [CustomerController::class, 'create']);
+    Route::post('create', [CustomerController::class, 'store']);
+    Route::get('delete/{id}', [CustomerController::class, 'delete']);
+    Route::get('edit/{id}', [CustomerController::class, 'edit']);
+    Route::post('update/{id}', [CustomerController::class, 'update']);
+
+    // APIs
+    Route::get('getList', [CustomerController::class, 'getList']);
 });
