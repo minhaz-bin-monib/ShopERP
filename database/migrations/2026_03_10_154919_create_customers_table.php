@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id('customer_id'); // Primary key with custom name
-            $table->date(column: 'registration_date');
+            $table->date(column: 'registration_date')->nullable();
             $table->string('customer_name', 150);
             $table->string('customer_code', 150)->nullable();
             $table->string('proprietor_name', 150)->nullable();
@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('customer_nid', 25)->nullable();
             $table->string('customer_zone', 150)->nullable();
             $table->string('customer_reminder', 150)->nullable();
-            $table->string('customer_address', 150)->nullable();
+            $table->string('customer_address', 250)->nullable();
             $table->string('customer_note', 250)->nullable();
             $table->string('customer_status', 30)->nullable();
             $table->string('action_type',50)->nullable();

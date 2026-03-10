@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\AttributesController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -90,4 +91,19 @@ Route::group(['prefix' => 'customer','middleware' => ['isLoggedIn','roleCheck:Ad
 
     // APIs
     Route::get('getList', [CustomerController::class, 'getList']);
+});
+
+
+// ------------------------- Supplier Routes ------------------------
+
+Route::group(['prefix' => 'supplier','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('list', [SupplierController::class, 'show']);
+    Route::get('create', [SupplierController::class, 'create']);
+    Route::post('create', [SupplierController::class, 'store']);
+    Route::get('delete/{id}', [SupplierController::class, 'delete']);
+    Route::get('edit/{id}', [SupplierController::class, 'edit']);
+    Route::post('update/{id}', [SupplierController::class, 'update']);
+
+    // APIs
+    Route::get('getList', [SupplierController::class, 'getList']);
 });
