@@ -16,41 +16,114 @@
     <link rel="stylesheet" href="{{ asset('bootstrap/css/select.css') }}">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/style.css') }}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
+
+        :root {
+            --side-ink: #17323b;
+            --side-muted: #4f626b;
+            --side-bg: #f8fbfc;
+            --side-line: #dbe7ea;
+            --side-accent: #2f6f74;
+            --side-accent-2: #7cc9b0;
+        }
+
+        #sidebar {
+            background: var(--side-bg);
+            border-right: 1px solid var(--side-line);
+            box-shadow: 12px 0 30px rgba(31, 27, 22, 0.05);
+        }
+
+        #sidebar .logo img {
+            filter: saturate(1.05);
+        }
+
+        #sidebar .components {
+            padding: 10px 10px 22px;
+            font-family: 'Manrope', Arial, sans-serif;
+        }
+
+        #sidebar ul li a {
+            color: var(--side-ink);
+            font-weight: 600;
+            font-size: 15px;
+            padding: 10px 14px;
+            margin: 6px 0;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #sidebar ul li a:hover,
+        #sidebar ul li a:focus {
+            background: linear-gradient(135deg, rgba(47, 111, 116, 0.12), rgba(124, 201, 176, 0.2));
+            color: #123038;
+            text-decoration: none;
+        }
+
+        #sidebar ul li .dropdown-toggle::after {
+            border-top-color: var(--side-muted);
+        }
+
+        #sidebar ul li ul li a {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--side-muted);
+            padding-left: 22px;
+        }
+
+        #sidebar ul li ul li a:hover {
+            color: var(--side-ink);
+        }
+
+        #sidebar .custom-menu .sidebar-toggle {
+            background: linear-gradient(135deg, var(--side-accent), var(--side-accent-2));
+            border: none;
+            box-shadow: 0 10px 24px rgba(47, 111, 116, 0.25);
+            color: #ffffff;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #sidebar .custom-menu .sidebar-toggle:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 14px 28px rgba(47, 111, 116, 0.3);
+        }
+
+        #sidebar .custom-menu .sidebar-toggle:focus {
+            box-shadow: 0 0 0 3px rgba(47, 111, 116, 0.35);
+        }
+
+        #sidebar .custom-menu .sidebar-toggle .fa {
+            font-size: 18px;
+        }
+
+        #topHeader {
+            font-family: 'Manrope', Arial, sans-serif;
+        }
+
+        #PageName {
+            color: var(--side-accent) !important;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+        }
+    </style>
 
 </head>
 
 <body>
 
-    <div id="topHeader"
-        style="
-        background: #ffffff;
-        width: 100%;
-        height: 41px;
-        z-index: 1;
-        border-bottom: 1px solid #e1e1e1;
-        position: fixed;
-        top: 0;
-        box-sizing: border-box;
-        box-shadow: 1px 1px 10px #e4e4e4;
-        text-align: right;
-        padding: 5px 42px;">
-        <b>
-            <span id="PageName"
-                style="margin: 30%;
-                       font-size: 15px;
-                       color: #6a0cd8;
-                       letter-spacing: 1px;">
-            </span>
-        </b>
-        <b><span id="dateShow"></span> &nbsp;
-            <span id="timeShow"></span>&nbsp;
-            <span id="dayShow"></span>&nbsp;
-        </b>
-    </div>
     <div class="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
             <div class="custom-menu">
-                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <button type="button" id="sidebarCollapse" class="btn sidebar-toggle">
                     <i class="fa fa-bars"></i>
                     <span class="sr-only">Toggle Menu</span>
                 </button>
@@ -61,129 +134,114 @@
                             src="{{ url('/img/logo.png') }}">
                         <span class="text-white"><span>
                     </a></h5>
+                @php
+                    $isProduct = Request::is('product*');
+                    $isCustomer = Request::is('customer*');
+                    $isSupplier = Request::is('supplier*');
+                    $isCompany = Request::is('company*');
+                    $isAttributes = Request::is('attributes*');
+                    $isCategory = Request::is('category*');
+                @endphp
                 @if (Session::get('loginRole') == 'Admin' || Session::get('loginRole') == 'Operator')
-                <ul class="list-unstyled components mb-5">
-                    <li>
-                        <a href="#ProductSubmenu" data-bs-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">Product </a>
-                        <ul class="collapse list-unstyled" id="ProductSubmenu">
-                            <li>
-                                <a href="{{ url('/product/create') }}">Add Product</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/product/list') }}">Products</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#CustomerSubmenu" data-bs-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">Customer </a>
-                        <ul class="collapse list-unstyled" id="CustomerSubmenu">
-                            <li>
-                                <a href="{{ url('/customer/create') }}">Add Customer</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/customer/list') }}">Customers</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#SupplierControllerSubmenu" data-bs-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">Supplier </a>
-                        <ul class="collapse list-unstyled" id="SupplierControllerSubmenu">
-                            <li>
-                                <a href="{{ url('/supplier/create') }}">Add Supplier</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/supplier/list') }}">Suppliers</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#companySubmenu" data-bs-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">Company </a>
-                        <ul class="collapse list-unstyled" id="companySubmenu">
-                            <li>
-                                <a href="{{ url('/company/create') }}">Add Company</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/company/list') }}">Companies</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#attributesSubmenu" data-bs-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">Attributes </a>
-                        <ul class="collapse list-unstyled" id="attributesSubmenu">
-                            <li>
-                                <a href="{{ url('/attributes/create') }}">Add Attribute</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/attributes/list') }}">Attributes</a>
-                            </li>
-                        </ul>
-                    </li>
+                    <ul class="list-unstyled components mb-5" id="sidebar-accordion">
+                        <li>
+                            <a href="#ProductSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isProduct ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isProduct ? 'active' : '' }}">Product </a>
+                            <ul class="collapse list-unstyled {{ $isProduct ? 'show' : '' }}" id="ProductSubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/product/create') }}">Add Product</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/product/list') }}">Products</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#CustomerSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isCustomer ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isCustomer ? 'active' : '' }}">Customer </a>
+                            <ul class="collapse list-unstyled {{ $isCustomer ? 'show' : '' }}" id="CustomerSubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/customer/create') }}">Add Customer</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/customer/list') }}">Customers</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#SupplierControllerSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isSupplier ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isSupplier ? 'active' : '' }}">Supplier </a>
+                            <ul class="collapse list-unstyled {{ $isSupplier ? 'show' : '' }}" id="SupplierControllerSubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/supplier/create') }}">Add Supplier</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/supplier/list') }}">Suppliers</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#companySubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isCompany ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isCompany ? 'active' : '' }}">Company </a>
+                            <ul class="collapse list-unstyled {{ $isCompany ? 'show' : '' }}" id="companySubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/company/create') }}">Add Company</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/company/list') }}">Companies</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#attributesSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isAttributes ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isAttributes ? 'active' : '' }}">Attributes </a>
+                            <ul class="collapse list-unstyled {{ $isAttributes ? 'show' : '' }}" id="attributesSubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/attributes/create') }}">Add Attribute</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/attributes/list') }}">Attributes</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#categorySubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isCategory ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isCategory ? 'active' : '' }}">Category </a>
+                            <ul class="collapse list-unstyled {{ $isCategory ? 'show' : '' }}" id="categorySubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/category/create') }}">Add Category</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/category/list') }}">Categories</a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <li>
-                        <a href="{{ url('/logout') }}">Logout</a>
-                    </li>
-                </ul>
+                        <li>
+                            <a href="{{ url('/logout') }}">Logout</a>
+                        </li>
+                    </ul>
                 @endif
                 @if (Session::get('loginRole') == 'Assistant')
-                <ul class="list-unstyled components mb-5">
-                    <li>
-                        <a href="#categorySubmenu" data-bs-toggle="collapse" aria-expanded="false"
-                            class="dropdown-toggle">Category </a>
-                        <ul class="collapse list-unstyled" id="categorySubmenu">
-                            <li>
-                                <a href="{{ url('/category/create') }}">Add Category</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/category/list') }}">Categories</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="{{ url('/logout') }}">Logout</a>
-                    </li>
-                </ul>
+                    <ul class="list-unstyled components mb-5" id="sidebar-accordion-assistant">
+                        <li>
+                            <a href="#categorySubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isCategory ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isCategory ? 'active' : '' }}">Category </a>
+                            <ul class="collapse list-unstyled {{ $isCategory ? 'show' : '' }}" id="categorySubmenu" data-bs-parent="#sidebar-accordion-assistant">
+                                <li>
+                                    <a href="{{ url('/category/create') }}">Add Category</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/category/list') }}">Categories</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="{{ url('/logout') }}">Logout</a>
+                        </li>
+                    </ul>
                 @endif
 
             </div>
         </nav>
 
-        <script>
-            function updateTime() {
-                const now = new Date();
-
-                // Get date components
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
-                const day = String(now.getDate()).padStart(2, '0');
-
-                // Get time components and convert to 12-hour format
-                let hours = now.getHours();
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                const seconds = String(now.getSeconds()).padStart(2, '0');
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12 || 12; // Convert 0 to 12 for 12 AM/PM hour format
-                const timeString = `${hours}:${minutes}:${seconds} ${ampm}`;
-
-                // Get the day of the week
-                const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-                const dayOfWeek = daysOfWeek[now.getDay()];
-
-                // Format the date and day
-                const dateString = `${day}-${month}-${year}`;
-                const dayString = `${dayOfWeek}`;
-
-                // Display the formatted date, time, and day
-                document.getElementById('dateShow').textContent = dateString;
-                document.getElementById('timeShow').textContent = timeString;
-                document.getElementById('dayShow').textContent = dayString;
-            }
-
-            // Update the time immediately and set an interval to update every second
-            updateTime();
-            setInterval(updateTime, 1000);
-        </script>
