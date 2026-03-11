@@ -64,6 +64,18 @@
                 @if (Session::get('loginRole') == 'Admin' || Session::get('loginRole') == 'Operator')
                 <ul class="list-unstyled components mb-5">
                     <li>
+                        <a href="#ProductSubmenu" data-bs-toggle="collapse" aria-expanded="false"
+                            class="dropdown-toggle">Product </a>
+                        <ul class="collapse list-unstyled" id="ProductSubmenu">
+                            <li>
+                                <a href="{{ url('/product/create') }}">Add Product</a>
+                            </li>
+                            <li>
+                                <a href="{{ url('/product/list') }}">Products</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
                         <a href="#CustomerSubmenu" data-bs-toggle="collapse" aria-expanded="false"
                             class="dropdown-toggle">Customer </a>
                         <ul class="collapse list-unstyled" id="CustomerSubmenu">

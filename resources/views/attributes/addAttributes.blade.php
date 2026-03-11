@@ -35,6 +35,9 @@
                             <option value="Color" {{ old('attribute_category', $attributes->attribute_category ?? '') == 'Color' ? 'selected' : '' }}>
                                 Color
                             </option>
+                            <option value="Department" {{ old('attribute_category', $attributes->attribute_category ?? '') == 'Color' ? 'selected' : '' }}>
+                                Department
+                            </option>
 
                             <option value="Size" {{ old('attribute_category', $attributes->attribute_category ?? '') == 'Size' ? 'selected' : '' }}>
                                 Size

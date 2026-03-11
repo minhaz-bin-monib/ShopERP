@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id('attribute_id');
             $table->string('attribute_name', 150);
             $table->string('attribute_category', 150);
-            $table->string('attribute_status', 150);
+            $table->string('attribute_status', 150)->nullable();
             $table->string('action_type',50)->nullable();
             $table->string('user_id',200)->nullable();
             $table->date('action_date')->nullable();

@@ -8,6 +8,7 @@ use App\Http\Controllers\AttributesController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,4 +107,19 @@ Route::group(['prefix' => 'supplier','middleware' => ['isLoggedIn','roleCheck:Ad
 
     // APIs
     Route::get('getList', [SupplierController::class, 'getList']);
+});
+
+
+// ------------------------- Product Routes ------------------------
+
+Route::group(['prefix' => 'product','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('list', [ProductController::class, 'show']);
+    Route::get('create', [ProductController::class, 'create']);
+    Route::post('create', [ProductController::class, 'store']);
+    Route::get('delete/{id}', [ProductController::class, 'delete']);
+    Route::get('edit/{id}', [ProductController::class, 'edit']);
+    Route::post('update/{id}', [ProductController::class, 'update']);
+
+    // APIs
+    Route::get('getList', [ProductController::class, 'getList']);
 });
