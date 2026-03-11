@@ -89,6 +89,7 @@
             margin: 0 !important;
             font-family: 'Manrope', Arial, sans-serif;
             color: var(--ink-soft);
+            flex-wrap: wrap;
         }
 
         .dt-container .dt-layout-row .dt-layout-start,
@@ -96,11 +97,17 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .dt-container .dt-layout-row label {
             font-size: 13px;
             margin-bottom: 0;
+        }
+
+        .dt-container .dt-search,
+        .dt-container .dt-length {
+            width: auto;
         }
 
         .dt-container .dt-search .dt-input {
@@ -261,6 +268,33 @@
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 12px;
+            }
+
+            .dt-container .dt-layout-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+
+            .dt-container .dt-layout-row .dt-layout-start,
+            .dt-container .dt-layout-row .dt-layout-end {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .dt-container .dt-search .dt-input,
+            .dt-container .dt-length .dt-input {
+                width: 100%;
+                min-width: 0;
+            }
+
+            .cat-table-wrap {
+                overflow-x: auto;
+            }
+
+            #myTable {
+                min-width: 620px;
             }
         }
     </style>

@@ -114,6 +114,21 @@
             font-weight: 700;
             letter-spacing: 0.6px;
         }
+
+        @media (max-width: 991.98px) {
+            #sidebar {
+                margin-left: -180px;
+            }
+
+            #sidebar.active {
+                margin-left: 0;
+            }
+
+            #content,
+            #content.active {
+                margin-left: 0 !important;
+            }
+        }
     </style>
 
 </head>
