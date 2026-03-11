@@ -289,7 +289,10 @@
         </div>
     </div>
     <script type="text/javascript">
-        document.getElementById('PageName').innerText = '{{ $toptitle }}';
+        const pageName = document.getElementById('PageName');
+        if (pageName) {
+            pageName.innerText = '{{ $toptitle }}';
+        }
     </script>
 
     <!-- END View Content Here -->

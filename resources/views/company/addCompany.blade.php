@@ -7,62 +7,228 @@
 
 @section('main-section')
     <!-- START View Content Here -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap');
 
-    <div class="container mt-4">
-        {{-- <h5>{{$toptitle}}</h5> --}}
-        <div class="card p-4">
-            <form action="{{ $url }}" method="post">
-                @csrf
+        :root {
+            --ink: #1f1b16;
+            --ink-soft: #3a332c;
+            --sun: #f7c243;
+            --ocean: #2f6f74;
+            --shadow: 0 20px 60px rgba(33, 26, 18, 0.18);
+        }
 
-                <div class="form-row">
+        .category-page {
+            min-height: 72vh;
+            padding: 28px 10px 60px;
+            border-radius: 24px;
+        }
 
-                    <div class="form-group col-md-4">
-                        <label for="company_name">Company Name <span class="text-danger"><b>*</b></span></label>
-                        <input type="text" name="company_name" value="{{ old('company_name', $company->company_name) }}"
-                            class="form-control" id="company_name">
-                        <span class="text-danger">
-                            @error('company_name')
-                                {{ $message }}
-                            @enderror
-                        </span>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="company_code">Company Code <span class="text-danger"><b></b></span></label>
-                        <input type="text" name="company_code" value="{{ old('company_code', $company->company_code) }}"
-                            class="form-control" id="company_code">
-                        <span class="text-danger">
-                            @error('company_code')
-                                {{ $message }}
-                            @enderror
-                        </span>
-                    </div>
+        .category-shell {
+            background: #fffdf9;
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
 
+        .category-hero {
+            background: linear-gradient(160deg, #2f6f74, #3c8f8a);
+            color: #ffffff;
+            padding: 34px 32px;
+            position: relative;
+        }
 
-                    <div class="form-group col-md-4">
-                        <label for="company_status">Company Status</label>
-                        <select name="company_status" class="form-control">
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 20px;
+        }
 
-                            <option value="Active" {{ old('company_status', $company->company_status ?? '') == 'Active' ? 'selected' : '' }}>
-                                Active
-                            </option>
+        .category-badge span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--sun);
+        }
 
-                            <option value="Inactive" {{ old('company_status', $company->company_status ?? '') == 'Inactive' ? 'selected' : '' }}>
-                                Inactive
-                            </option>
+        .category-body {
+            padding: 32px 32px 36px;
+        }
 
-                        </select>
-                    </div>
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 28px;
+            align-items: center;
+        }
 
+        .category-card {
+            background: #ffffff;
+            border: 1px solid #efe4d6;
+            border-radius: 18px;
+            padding: 26px 24px 22px;
+        }
+
+        .category-card-title {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 26px;
+            color: var(--ink);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-card-title span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--sun);
+            box-shadow: 0 0 0 6px rgba(247, 194, 67, 0.2);
+            flex: none;
+        }
+
+        .category-form label {
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .category-form .form-control,
+        .category-form select {
+            border-radius: 12px;
+            border: 1px solid #e8dcca;
+            background: #fffdf9;
+            height: 48px;
+            padding: 10px 16px;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 17px;
+        }
+
+        .category-form .form-control:focus,
+        .category-form select:focus {
+            border-color: var(--ocean);
+            box-shadow: 0 0 0 3px rgba(47, 111, 116, 0.15);
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 8px;
+        }
+
+        .category-btn {
+            background: linear-gradient(135deg, #2f6f74, #7cc9b0);
+            border: none;
+            color: #ffffff;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-weight: 700;
+            padding: 12px 26px;
+            border-radius: 999px;
+            box-shadow: 0 14px 30px rgba(47, 111, 116, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-size: 17px;
+        }
+
+        .category-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 38px rgba(47, 111, 116, 0.35);
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .category-animated {
+            animation: floatIn 0.6s ease both;
+        }
+
+        @media (max-width: 576px) {
+            .category-body {
+                padding: 24px 20px 28px;
+            }
+        }
+    </style>
+
+    <div class="container-fluid category-page">
+        <div class="category-shell category-animated">
+            <div class="category-hero">
+                <div class="category-badge">
+                    <span></span>
+                    {{ $toptitle }}
                 </div>
+            </div>
 
+            <div class="category-body">
+                <div class="category-grid">
+                    <div class="category-card category-form">
+                        <div class="category-card-title"><span></span>{{ $toptitle }}</div>
+                        <form action="{{ $url }}" method="post">
+                            @csrf
 
-                <button type="submit" class="btn btn-primary">Save</button>
-            </form>
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="company_name">Company Name <span class="text-danger"><b>*</b></span></label>
+                                    <input type="text" name="company_name" value="{{ old('company_name', $company->company_name) }}"
+                                        class="form-control" id="company_name">
+                                    <span class="text-danger">
+                                        @error('company_name')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="company_code">Company Code</label>
+                                    <input type="text" name="company_code" value="{{ old('company_code', $company->company_code) }}"
+                                        class="form-control" id="company_code">
+                                    <span class="text-danger">
+                                        @error('company_code')
+                                            {{ $message }}
+                                        @enderror
+                                    </span>
+                                </div>
+
+                                <div class="form-group col-md-4">
+                                    <label for="company_status">Company Status</label>
+                                    <select name="company_status" class="form-control">
+                                        <option value="Active" {{ old('company_status', $company->company_status ?? '') == 'Active' ? 'selected' : '' }}>
+                                            Active
+                                        </option>
+                                        <option value="Inactive" {{ old('company_status', $company->company_status ?? '') == 'Inactive' ? 'selected' : '' }}>
+                                            Inactive
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="category-actions">
+                                <button type="submit" class="category-btn">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
     <script type="text/javascript">
-        document.getElementById('PageName').innerText = '{{ $toptitle }}';
+        const pageName = document.getElementById('PageName');
+        if (pageName) {
+            pageName.innerText = '{{ $toptitle }}';
+        }
     </script>
 
     <!-- END View Content Here -->
