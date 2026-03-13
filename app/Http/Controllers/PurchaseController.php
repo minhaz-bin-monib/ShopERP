@@ -6,8 +6,10 @@ use App\Models\Attributes;
 use App\Models\Category;
 use App\Models\Company;
 use App\Models\Product;
+use App\Models\ProductPriceHistory;
 use App\Models\Purchase;
 use App\Models\PurchaseHistory;
+use App\Models\StockMovement;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -216,6 +218,8 @@ class PurchaseController extends Controller
         $purchase->save();
 
         $this->logPurchaseHistory($purchase, 'INSERT', $request);
+        $this->recordStockMovementForPurchase($purchase, $request, 'IN', null);
+        $this->syncProductSellingPrice($purchase, $request, 'purchase');
 
         return redirect('/purchase/create');
     }
@@ -234,6 +238,7 @@ class PurchaseController extends Controller
         ]);
 
         $purchase = Purchase::find($id);
+        $originalPurchase = $purchase ? $purchase->replicate() : null;
 
         $purchase->purchase_date = $request['purchase_date'];
         $purchase->chalan_no = $request['chalan_no'];
@@ -270,6 +275,8 @@ class PurchaseController extends Controller
         $purchase->save();
 
         $this->logPurchaseHistory($purchase, 'UPDATE', $request);
+        $this->recordStockMovementForPurchase($purchase, $request, 'ADJ', $originalPurchase);
+        $this->syncProductSellingPrice($purchase, $request, 'purchase');
 
         return redirect('/purchase/list');
     }
@@ -306,5 +313,107 @@ class PurchaseController extends Controller
         $history->action_date = now();
 
         $history->save();
+    }
+
+    private function recordStockMovementForPurchase(Purchase $purchase, Request $request, string $movementType, ?Purchase $originalPurchase)
+    {
+        $userId = $request->session()->get('loginId') ?? 'sys-user';
+
+        $newQty = $purchase->update_stock;
+        if ($newQty === null || $newQty === '') {
+            $newQty = $purchase->quantity;
+        }
+        $newQty = (float) ($newQty ?? 0);
+
+        if ($movementType === 'IN') {
+            if ($newQty == 0 || empty($purchase->product)) {
+                return;
+            }
+            $this->createStockMovement($purchase->product, 'IN', $newQty, $purchase, $userId);
+            return;
+        }
+
+        if ($movementType === 'ADJ') {
+            if (!$originalPurchase) {
+                return;
+            }
+            $oldQty = $originalPurchase->update_stock;
+            if ($oldQty === null || $oldQty === '') {
+                $oldQty = $originalPurchase->quantity;
+            }
+            $oldQty = (float) ($oldQty ?? 0);
+            $oldProduct = $originalPurchase->product;
+            $newProduct = $purchase->product;
+
+            if ($oldProduct && ($oldProduct != $newProduct)) {
+                if ($oldQty != 0) {
+                    $this->createStockMovement($oldProduct, 'OUT', $oldQty, $purchase, $userId);
+                }
+                if ($newQty != 0 && $newProduct) {
+                    $this->createStockMovement($newProduct, 'IN', $newQty, $purchase, $userId);
+                }
+                return;
+            }
+
+            $deltaQty = $newQty - $oldQty;
+            if ($deltaQty != 0 && $newProduct) {
+                $this->createStockMovement($newProduct, 'ADJ', $deltaQty, $purchase, $userId);
+            }
+        }
+    }
+
+    private function createStockMovement($productId, string $movementType, float $qty, Purchase $purchase, string $userId)
+    {
+        if (empty($productId)) {
+            return;
+        }
+        $movement = new StockMovement();
+        $movement->product_id = $productId;
+        $movement->movement_type = $movementType;
+        $movement->qty = $qty;
+        $movement->unit_cost = $purchase->unit_price;
+        $movement->selling_price = $purchase->selling_price;
+        $movement->ref_type = 'purchase';
+        $movement->ref_id = $purchase->purchase_id;
+        $movement->user_id = $userId;
+        $movement->action_date = now();
+        $movement->save();
+    }
+
+    private function syncProductSellingPrice(Purchase $purchase, Request $request, string $source)
+    {
+        if (empty($purchase->product)) {
+            return;
+        }
+        if ($purchase->selling_price === null || $purchase->selling_price === '') {
+            return;
+        }
+
+        $product = Product::find($purchase->product);
+        if (!$product) {
+            return;
+        }
+
+        $oldPrice = $product->selling_price;
+        $newPrice = (float) $purchase->selling_price;
+
+        if ($oldPrice != $newPrice) {
+            $product->selling_price = $newPrice;
+            $product->action_type = 'UPDATE';
+            $product->user_id = $request->session()->get('loginId') ?? 'sys-user';
+            $product->action_date = now();
+            $product->save();
+
+            $history = new ProductPriceHistory();
+            $history->product_id = $product->product_id;
+            $history->old_price = $oldPrice;
+            $history->new_price = $newPrice;
+            $history->source = $source;
+            $history->ref_type = 'purchase';
+            $history->ref_id = $purchase->purchase_id;
+            $history->user_id = $request->session()->get('loginId') ?? 'sys-user';
+            $history->action_date = now();
+            $history->save();
+        }
     }
 }
