@@ -9,6 +9,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PurchaseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,4 +123,14 @@ Route::group(['prefix' => 'product','middleware' => ['isLoggedIn','roleCheck:Adm
 
     // APIs
     Route::get('getList', [ProductController::class, 'getList']);
+});
+
+// ------------------------- Purchase Routes ------------------------
+
+Route::group(['prefix' => 'purchase','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('list', [PurchaseController::class, 'show']);
+    Route::get('create', [PurchaseController::class, 'create']);
+    Route::post('create', [PurchaseController::class, 'store']);
+    Route::get('edit/{id}', [PurchaseController::class, 'edit']);
+    Route::post('update/{id}', [PurchaseController::class, 'update']);
 });

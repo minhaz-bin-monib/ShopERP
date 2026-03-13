@@ -156,9 +156,22 @@
                     $isCompany = Request::is('company*');
                     $isAttributes = Request::is('attributes*');
                     $isCategory = Request::is('category*');
+                    $isPurchase = Request::is('purchase*');
                 @endphp
                 @if (Session::get('loginRole') == 'Admin' || Session::get('loginRole') == 'Operator')
                     <ul class="list-unstyled components mb-5" id="sidebar-accordion">
+                         <li>
+                            <a href="#purchaseSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isPurchase ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isPurchase ? 'active' : '' }}">Purchase </a>
+                            <ul class="collapse list-unstyled {{ $isPurchase ? 'show' : '' }}" id="purchaseSubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/purchase/create') }}">Add Purchase</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/purchase/list') }}">Purchases</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="#ProductSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isProduct ? 'true' : 'false' }}"
                                 class="dropdown-toggle {{ $isProduct ? 'active' : '' }}">Product </a>
@@ -239,6 +252,18 @@
                 @endif
                 @if (Session::get('loginRole') == 'Assistant')
                     <ul class="list-unstyled components mb-5" id="sidebar-accordion-assistant">
+                        <li>
+                            <a href="#purchaseSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isPurchase ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isPurchase ? 'active' : '' }}">Purchase </a>
+                            <ul class="collapse list-unstyled {{ $isPurchase ? 'show' : '' }}" id="purchaseSubmenu" data-bs-parent="#sidebar-accordion-assistant">
+                                <li>
+                                    <a href="{{ url('/purchase/create') }}">Add Purchase</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/purchase/list') }}">Purchases</a>
+                                </li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="#categorySubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isCategory ? 'true' : 'false' }}"
                                 class="dropdown-toggle {{ $isCategory ? 'active' : '' }}">Category </a>
