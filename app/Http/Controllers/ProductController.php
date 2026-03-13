@@ -100,7 +100,7 @@ class ProductController extends Controller
         $product->category = $request['category'];
         $product->product_status = $request['product_status'] ?? 'Active';
         $product->action_type = 'INSERT';
-        $product->user_id = 'sys-user';
+        $product->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $product->action_date = now();
 
         $product->save();
@@ -109,11 +109,12 @@ class ProductController extends Controller
     }
 
     // [httpGet]
-    public function delete($id)
+    public function delete($id, Request $request)
     {
         $product = Product::find($id);
 
         $product->action_type = 'DELETE';
+        $product->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $product->action_date = now();
 
         $product->save();
@@ -199,7 +200,7 @@ class ProductController extends Controller
         $product->category = $request['category'];
         $product->product_status = $request['product_status'] ?? 'Active';
         $product->action_type = 'UPDATE';
-        $product->user_id = 'sys-user';
+        $product->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $product->action_date = now();
 
         $product->save();

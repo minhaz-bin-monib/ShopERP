@@ -55,7 +55,7 @@ class CategoryController extends Controller
         $category->category_name = $request['category_name'];  
         $category->category_status =  $request['category_status'] ?? 'Active';  
         $category->action_type = 'INSERT';
-        $category->user_id = 'sys-user';
+        $category->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $category->action_date = now();
 
         $category->save();
@@ -64,11 +64,12 @@ class CategoryController extends Controller
     }
 
     // [httpGet]
-    public function delete($id)
+    public function delete($id, Request $request)
     {
         $category = Category::find($id);
         
         $category->action_type = 'DELETE';
+        $category->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $category->action_date = now();
 
         $category->save();
@@ -113,7 +114,7 @@ class CategoryController extends Controller
         $category->category_name = $request['category_name'];  
         $category->category_status =  $request['category_status'] ?? 'Active';  
         $category->action_type = 'UPDATE';
-        $category->user_id = 'sys-user';
+        $category->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $category->action_date = now();
 
         $category->save();

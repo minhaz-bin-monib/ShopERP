@@ -63,7 +63,7 @@ class SupplierController extends Controller
         $supplier->supplier_note = $request['supplier_note'];
         $supplier->supplier_status = $request['supplier_status'] ?? 'Active';
         $supplier->action_type = 'INSERT';
-        $supplier->user_id = 'sys-user';
+        $supplier->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $supplier->action_date = now();
 
         $supplier->save();
@@ -71,11 +71,12 @@ class SupplierController extends Controller
         return redirect('/supplier/list');
     }
     // [httpGet]
-    public function delete($id)
+    public function delete($id, Request $request)
     {
         $supplier = Supplier::find($id);
 
         $supplier->action_type = 'DELETE';
+        $supplier->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $supplier->action_date = now();
 
         $supplier->save();
@@ -128,7 +129,7 @@ class SupplierController extends Controller
         $supplier->supplier_note = $request['supplier_note'];
         $supplier->supplier_status = $request['supplier_status'] ?? 'Active';
         $supplier->action_type = 'UPDATE';
-        $supplier->user_id = 'sys-user';
+        $supplier->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $supplier->action_date = now();
 
         $supplier->save();

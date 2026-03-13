@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\Purchase;
+use App\Models\PurchaseHistory;
 use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -209,10 +210,12 @@ class PurchaseController extends Controller
         $purchase->category = $request['category'];
         $purchase->availability = $request['availability'] ?? 'Yes';
         $purchase->action_type = 'INSERT';
-        $purchase->user_id = 'sys-user';
+        $purchase->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $purchase->action_date = now();
 
         $purchase->save();
+
+        $this->logPurchaseHistory($purchase, 'INSERT', $request);
 
         return redirect('/purchase/create');
     }
@@ -261,11 +264,47 @@ class PurchaseController extends Controller
         $purchase->category = $request['category'];
         $purchase->availability = $request['availability'] ?? 'Yes';
         $purchase->action_type = 'UPDATE';
-        $purchase->user_id = 'sys-user';
+        $purchase->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $purchase->action_date = now();
 
         $purchase->save();
 
+        $this->logPurchaseHistory($purchase, 'UPDATE', $request);
+
         return redirect('/purchase/list');
+    }
+
+    private function logPurchaseHistory(Purchase $purchase, string $actionType, Request $request)
+    {
+        $history = new PurchaseHistory();
+
+        $history->purchase_id = $purchase->purchase_id;
+        $history->purchase_date = $purchase->purchase_date;
+        $history->chalan_no = $purchase->chalan_no;
+        $history->update_stock = $purchase->update_stock;
+        $history->product = $purchase->product;
+        $history->quantity = $purchase->quantity;
+        $history->unit_price = $purchase->unit_price;
+        $history->profit_percent = $purchase->profit_percent;
+        $history->selling_price = $purchase->selling_price;
+        $history->total_price = $purchase->total_price;
+        $history->batch_no = $purchase->batch_no;
+        $history->production_date = $purchase->production_date;
+        $history->expiry_date = $purchase->expiry_date;
+        $history->adjustment_cost = $purchase->adjustment_cost;
+        $history->supplier = $purchase->supplier;
+        $history->receiver_name = $purchase->receiver_name;
+        $history->color = $purchase->color;
+        $history->size = $purchase->size;
+        $history->weight = $purchase->weight;
+        $history->material = $purchase->material;
+        $history->brands = $purchase->brands;
+        $history->category = $purchase->category;
+        $history->availability = $purchase->availability;
+        $history->action_type = $actionType;
+        $history->user_id = $request->session()->get('loginId') ?? 'sys-user';
+        $history->action_date = now();
+
+        $history->save();
     }
 }

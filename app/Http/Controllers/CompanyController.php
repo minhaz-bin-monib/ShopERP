@@ -56,7 +56,7 @@ class CompanyController extends Controller
         $company->company_code = $request['company_code'] ?? null;  
         $company->company_status =  $request['company_status'] ?? 'Active';  
         $company->action_type = 'INSERT';
-        $company->user_id = 'sys-user';
+        $company->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $company->action_date = now();
 
         $company->save();
@@ -65,11 +65,12 @@ class CompanyController extends Controller
     }
 
     // [httpGet]
-    public function delete($id)
+    public function delete($id, Request $request)
     {
         $company = Company::find($id);
-        
+
         $company->action_type = 'DELETE';
+        $company->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $company->action_date = now();
 
         $company->save();
@@ -115,7 +116,7 @@ class CompanyController extends Controller
         $company->company_code = $request['company_code'] ?? null;  
         $company->company_status =  $request['company_status'] ?? 'Active';  
         $company->action_type = 'UPDATE';
-        $company->user_id = 'sys-user';
+        $company->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $company->action_date = now();
 
         $company->save();

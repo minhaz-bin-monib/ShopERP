@@ -56,7 +56,7 @@ class AttributesController extends Controller
         $attributes->attribute_category = $request['attribute_category'];  
         $attributes->attribute_status =  $request['attribute_status'] ?? 'Active';  
         $attributes->action_type = 'INSERT';
-        $attributes->user_id = 'sys-user';
+        $attributes->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $attributes->action_date = now();
 
         $attributes->save();
@@ -65,11 +65,12 @@ class AttributesController extends Controller
     }
 
     // [httpGet]
-    public function delete($id)
+    public function delete($id, Request $request)
     {
         $attributes = Attributes::find($id);
         
         $attributes->action_type = 'DELETE';
+        $attributes->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $attributes->action_date = now();
 
         $attributes->save();
@@ -115,7 +116,7 @@ class AttributesController extends Controller
         $attributes->attribute_category = $request['attribute_category'];  
         $attributes->attribute_status =  $request['attribute_status'] ?? 'Active';  
         $attributes->action_type = 'UPDATE';
-        $attributes->user_id = 'sys-user';
+        $attributes->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $attributes->action_date = now();
 
         $attributes->save();

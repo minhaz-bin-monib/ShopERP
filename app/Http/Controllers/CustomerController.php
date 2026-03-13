@@ -72,7 +72,7 @@ class CustomerController extends Controller
 
         // system fields
         $customer->action_type = 'INSERT';
-        $customer->user_id = 'sys-user';
+        $customer->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $customer->action_date = now();
 
         $customer->save();
@@ -81,11 +81,12 @@ class CustomerController extends Controller
     }
 
     // [httpGet]
-    public function delete($id)
+    public function delete($id, Request $request)
     {
         $customer = Customer::find($id);
-        
+
         $customer->action_type = 'DELETE';
+        $customer->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $customer->action_date = now();
 
         $customer->save();
@@ -144,7 +145,7 @@ class CustomerController extends Controller
         $customer->customer_note = $request['customer_note'];
         $customer->customer_status = $request['customer_status'] ?? 'Active';
         $customer->action_type = 'UPDATE';
-        $customer->user_id = 'sys-user';
+        $customer->user_id = $request->session()->get('loginId') ?? 'sys-user';
         $customer->action_date = now();
 
         $customer->save();
