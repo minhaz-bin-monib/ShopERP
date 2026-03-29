@@ -10,6 +10,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SalesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,4 +134,12 @@ Route::group(['prefix' => 'purchase','middleware' => ['isLoggedIn','roleCheck:Ad
     Route::post('create', [PurchaseController::class, 'store']);
     Route::get('edit/{id}', [PurchaseController::class, 'edit']);
     Route::post('update/{id}', [PurchaseController::class, 'update']);
+});
+
+// ------------------------- Sales Routes ------------------------
+
+Route::group(['prefix' => 'sales','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('create', [SalesController::class, 'create']);
+    Route::post('create', [SalesController::class, 'store']);
+    Route::get('list', [SalesController::class, 'show']);
 });

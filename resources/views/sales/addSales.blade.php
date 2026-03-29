@@ -1,0 +1,504 @@
+@extends('layouts.main')
+
+<!-- Set Title -->
+@push('title')
+    <title>Sales Order</title>
+@endpush
+
+@section('main-section')
+    <!-- START View Content Here -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --ink: #1f1b16;
+            --ink-soft: #3a332c;
+            --sea: #2f6f74;
+            --sun: #f7c243;
+            --paper: #fffdf9;
+            --line: #eadfce;
+            --shadow: 0 18px 50px rgba(28, 23, 16, 0.12);
+        }
+
+        .sales-page {
+            min-height: 72vh;
+            padding: 16px 10px 40px;
+        }
+
+        .sales-shell {
+            background: var(--paper);
+            border-radius: 22px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--line);
+            overflow: hidden;
+        }
+
+        .sales-hero {
+            background: linear-gradient(160deg, #2f6f74, #3c8f8a);
+            color: #ffffff;
+            padding: 16px 22px;
+        }
+
+        .sales-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            padding: 6px 14px;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 18px;
+        }
+
+        .sales-badge span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--sun);
+        }
+
+        .sales-body {
+            padding: 12px 14px 22px;
+        }
+
+        .sales-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        .sales-card {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 12px 14px 14px;
+        }
+
+        .sales-card-title {
+            font-family: 'DM Serif Display', Georgia, serif;
+            font-size: 22px;
+            color: var(--ink);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sales-card-title span {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--sun);
+            box-shadow: 0 0 0 6px rgba(247, 194, 67, 0.2);
+            flex: none;
+        }
+
+        .sales-form label {
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .sales-form .form-control,
+        .sales-form select {
+            border-radius: 12px;
+            border: 1px solid #e8dcca;
+            background: #fffdf9;
+            height: 38px;
+            padding: 6px 10px;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        .sales-form textarea.form-control {
+            height: auto;
+            min-height: 86px;
+        }
+
+        .sales-form .form-control:focus,
+        .sales-form select:focus {
+            border-color: var(--sea);
+            box-shadow: 0 0 0 3px rgba(47, 111, 116, 0.15);
+        }
+
+        .sales-items-table {
+            width: 100%;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 13px;
+        }
+
+        .sales-items-table thead th {
+            border: 1px solid rgba(78, 70, 60, 0.12);
+            background: transparent;
+            font-weight: 600;
+            color: var(--ink-soft);
+            padding: 6px 8px;
+        }
+
+        .sales-items-table tbody td {
+            border: 1px solid rgba(78, 70, 60, 0.1);
+            padding: 6px 8px;
+        }
+
+        .sales-add-item {
+            background: rgba(47, 111, 116, 0.12);
+            border: 1px solid rgba(47, 111, 116, 0.2);
+            color: var(--sea);
+            font-weight: 600;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .sales-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .sales-btn {
+            background: linear-gradient(135deg, #2f6f74, #7cc9b0);
+            border: none;
+            color: #ffffff;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 999px;
+            box-shadow: 0 14px 30px rgba(47, 111, 116, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-size: 14px;
+        }
+
+        .sales-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 38px rgba(47, 111, 116, 0.35);
+        }
+
+        .sales-muted {
+            font-family: 'Manrope', Arial, sans-serif;
+            color: rgba(31, 27, 22, 0.7);
+            font-size: 13px;
+        }
+
+        .sales-summary {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .sales-summary .form-group {
+            margin-bottom: 6px;
+        }
+
+        @media (max-width: 991px) {
+            .sales-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <div class="container-fluid sales-page">
+        <div class="sales-shell">
+            <div class="sales-hero">
+                <div class="sales-badge">
+                    <span></span>
+                    {{ $toptitle }}
+                </div>
+            </div>
+
+            <div class="sales-body">
+                <form action="{{ $url }}" method="post" class="sales-form">
+                    @csrf
+                    <div class="sales-grid">
+                        <div class="sales-card">
+                            <div class="sales-card-title"><span></span>Sales Items</div>
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Assistant</label>
+                                    <select name="assistant_name" class="form-control">
+                                        <option value="">Select Employee</option>
+                                        @foreach ($employees as $emp)
+                                            <option value="{{ $emp->name }}">{{ $emp->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Bill No</label>
+                                    <input type="text" name="bill_no" value="{{ $billNo }}" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="sales-items-table" id="salesItemsTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th style="width: 90px;">Qty</th>
+                                            <th style="width: 110px;">Price</th>
+                                            <th style="width: 110px;">Total</th>
+                                            <th>Remarks</th>
+                                            <th style="width: 60px;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="sales-item-row">
+                                            <td>
+                                                <select name="product_id[]" class="form-control product-select">
+                                                    <option value="">Select Product</option>
+                                                    @foreach ($products as $prod)
+                                                        <option value="{{ $prod->product_id }}" data-price="{{ $prod->selling_price ?? 0 }}">
+                                                            {{ $prod->product_name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="number" step="0.01" name="qty[]" class="form-control qty-input" value="1">
+                                            </td>
+                                            <td>
+                                                <input type="number" step="0.01" name="price[]" class="form-control price-input">
+                                            </td>
+                                            <td>
+                                                <input type="number" step="0.01" name="total[]" class="form-control total-input" readonly>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="remarks[]" class="form-control" placeholder="Remarks">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-danger remove-row">X</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <button type="button" class="sales-add-item" id="addItemBtn">Add Item</button>
+
+                            <div class="sales-card-title" style="margin-top: 16px;"><span></span>Customer Information</div>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label>Customer List</label>
+                                    <select name="customer_id" class="form-control" id="customerSelect">
+                                        <option value="">Select Customer</option>
+                                        @foreach ($customers as $cust)
+                                            <option value="{{ $cust->customer_id }}"
+                                                data-name="{{ $cust->customer_name }}"
+                                                data-address="{{ $cust->customer_address }}"
+                                                data-phone="{{ $cust->customer_phone }}">
+                                                {{ $cust->customer_name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Sales Date</label>
+                                    <input type="date" name="sales_date" value="{{ $sales->sales_date }}" class="form-control">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Customer Name</label>
+                                    <input type="text" name="customer_name" id="customerName" class="form-control" placeholder="Enter Customer Name">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Customer Phone</label>
+                                    <input type="text" name="customer_phone" id="customerPhone" class="form-control" placeholder="Enter Customer Phone">
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Customer Address</label>
+                                    <input type="text" name="customer_address" id="customerAddress" class="form-control" placeholder="Enter Customer Address">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sales-card">
+                            <div class="sales-card-title"><span></span>Payment Summary</div>
+                            <div class="sales-summary">
+                                <div class="form-group">
+                                    <label>Special Discount %</label>
+                                    <input type="number" step="0.01" name="special_discount_percent" class="form-control" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Offer</label>
+                                    <input type="text" name="offer" class="form-control" placeholder="Apply Offer">
+                                </div>
+                                <div class="form-group">
+                                    <label>Gross</label>
+                                    <input type="number" step="0.01" name="gross_amount" class="form-control" value="0" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Loyalty</label>
+                                    <input type="number" step="0.01" name="loyalty" class="form-control" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Manual Discount %</label>
+                                    <input type="number" step="0.01" name="manual_discount_percent" class="form-control" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Net Amount</label>
+                                    <input type="number" step="0.01" name="net_amount" class="form-control" value="0" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Method</label>
+                                    <select name="payment_method" class="form-control">
+                                        <option value="Cash">Cash</option>
+                                        <option value="Bank">Bank</option>
+                                        <option value="Bkash">Bkash</option>
+                                        <option value="Rocket">Rocket</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Details</label>
+                                    <input type="text" name="payment_details" class="form-control" placeholder="Cheque No, Bank Name, Bkash No, Rocket No, Pure No, Etc..">
+                                </div>
+                                <div class="form-group">
+                                    <label>Bonus</label>
+                                    <input type="text" name="bonus_card" class="form-control" placeholder="Scan Card">
+                                </div>
+                                <div class="form-group">
+                                    <label>Given</label>
+                                    <input type="number" step="0.01" name="given_amount" class="form-control" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Paid Amount</label>
+                                    <input type="number" step="0.01" name="paid_amount" class="form-control" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>New Paid Amount</label>
+                                    <input type="number" step="0.01" name="new_paid_amount" class="form-control" value="0">
+                                </div>
+                                <div class="form-group">
+                                    <label>Payable</label>
+                                    <input type="number" step="0.01" name="payable_amount" class="form-control" value="0" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select name="status" class="form-control">
+                                        <option value="Paid">Paid</option>
+                                        <option value="Unpaid">Unpaid</option>
+                                        <option value="Partial">Partial</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Reference</label>
+                                    <input type="text" name="reference" class="form-control" value="0">
+                                </div>
+                            </div>
+                            <input type="hidden" name="sold_by" value="{{ session('loginId') }}">
+                            <div class="sales-actions">
+                                <button type="submit" class="sales-btn">Save & Print</button>
+                                <div class="sales-muted">Sales order will be saved and added to invoice list.</div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const pageName = document.getElementById('PageName');
+        if (pageName) {
+            pageName.innerText = '{{ $toptitle }}';
+        }
+
+        const salesItemsTable = document.getElementById('salesItemsTable');
+        const addItemBtn = document.getElementById('addItemBtn');
+        const customerSelect = document.getElementById('customerSelect');
+        const customerName = document.getElementById('customerName');
+        const customerPhone = document.getElementById('customerPhone');
+        const customerAddress = document.getElementById('customerAddress');
+
+        const grossInput = document.querySelector('input[name="gross_amount"]');
+        const netInput = document.querySelector('input[name="net_amount"]');
+        const payableInput = document.querySelector('input[name="payable_amount"]');
+        const specialInput = document.querySelector('input[name="special_discount_percent"]');
+        const manualInput = document.querySelector('input[name="manual_discount_percent"]');
+        const paidInput = document.querySelector('input[name="paid_amount"]');
+
+        const recalcRow = (row) => {
+            const qty = parseFloat(row.querySelector('.qty-input').value || '0');
+            const price = parseFloat(row.querySelector('.price-input').value || '0');
+            const total = qty * price;
+            row.querySelector('.total-input').value = total.toFixed(2);
+        };
+
+        const recalcSummary = () => {
+            let gross = 0;
+            document.querySelectorAll('.sales-item-row').forEach((row) => {
+                const total = parseFloat(row.querySelector('.total-input').value || '0');
+                gross += total;
+            });
+            const special = parseFloat(specialInput.value || '0');
+            const manual = parseFloat(manualInput.value || '0');
+            const net = gross - (gross * special / 100) - (gross * manual / 100);
+            const paid = parseFloat(paidInput.value || '0');
+            grossInput.value = gross.toFixed(2);
+            netInput.value = net.toFixed(2);
+            payableInput.value = (net - paid).toFixed(2);
+        };
+
+        const bindRowEvents = (row) => {
+            const productSelect = row.querySelector('.product-select');
+            const qtyInput = row.querySelector('.qty-input');
+            const priceInput = row.querySelector('.price-input');
+            const removeBtn = row.querySelector('.remove-row');
+
+            productSelect.addEventListener('change', () => {
+                const option = productSelect.options[productSelect.selectedIndex];
+                const price = option ? option.getAttribute('data-price') : '';
+                if (price !== null && price !== '') {
+                    priceInput.value = parseFloat(price).toFixed(2);
+                }
+                recalcRow(row);
+                recalcSummary();
+            });
+
+            qtyInput.addEventListener('input', () => {
+                recalcRow(row);
+                recalcSummary();
+            });
+            priceInput.addEventListener('input', () => {
+                recalcRow(row);
+                recalcSummary();
+            });
+
+            removeBtn.addEventListener('click', () => {
+                if (document.querySelectorAll('.sales-item-row').length > 1) {
+                    row.remove();
+                    recalcSummary();
+                }
+            });
+        };
+
+        document.querySelectorAll('.sales-item-row').forEach(bindRowEvents);
+
+        addItemBtn.addEventListener('click', () => {
+            const row = document.querySelector('.sales-item-row').cloneNode(true);
+            row.querySelectorAll('input').forEach(input => input.value = '');
+            row.querySelector('.qty-input').value = 1;
+            row.querySelector('.total-input').value = '';
+            row.querySelector('.product-select').selectedIndex = 0;
+            salesItemsTable.querySelector('tbody').appendChild(row);
+            bindRowEvents(row);
+        });
+
+        [specialInput, manualInput, paidInput].forEach((input) => {
+            input.addEventListener('input', recalcSummary);
+        });
+
+        customerSelect.addEventListener('change', () => {
+            const option = customerSelect.options[customerSelect.selectedIndex];
+            customerName.value = option ? option.getAttribute('data-name') || '' : '';
+            customerAddress.value = option ? option.getAttribute('data-address') || '' : '';
+            customerPhone.value = option ? option.getAttribute('data-phone') || '' : '';
+        });
+
+        recalcRow(document.querySelector('.sales-item-row'));
+        recalcSummary();
+    </script>
+
+    <!-- END View Content Here -->
+@endsection

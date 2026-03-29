@@ -157,9 +157,22 @@
                     $isAttributes = Request::is('attributes*');
                     $isCategory = Request::is('category*');
                     $isPurchase = Request::is('purchase*');
+                    $isSales = Request::is('sales*');
                 @endphp
                 @if (Session::get('loginRole') == 'Admin' || Session::get('loginRole') == 'Operator')
                     <ul class="list-unstyled components mb-5" id="sidebar-accordion">
+                        <li>
+                            <a href="#salesSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isSales ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isSales ? 'active' : '' }}">Sales </a>
+                            <ul class="collapse list-unstyled {{ $isSales ? 'show' : '' }}" id="salesSubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/sales/create') }}">Sales Order</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/sales/list') }}">Invoice Lists</a>
+                                </li>
+                            </ul>
+                        </li>
                          <li>
                             <a href="#purchaseSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isPurchase ? 'true' : 'false' }}"
                                 class="dropdown-toggle {{ $isPurchase ? 'active' : '' }}">Purchase </a>
@@ -253,6 +266,18 @@
                 @if (Session::get('loginRole') == 'Assistant')
                     <ul class="list-unstyled components mb-5" id="sidebar-accordion-assistant">
                         <li>
+                            <a href="#salesSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isSales ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isSales ? 'active' : '' }}">Sales </a>
+                            <ul class="collapse list-unstyled {{ $isSales ? 'show' : '' }}" id="salesSubmenu" data-bs-parent="#sidebar-accordion-assistant">
+                                <li>
+                                    <a href="{{ url('/sales/create') }}">Sales Order</a>
+                                </li>
+                                <li>
+                                    <a href="{{ url('/sales/list') }}">Invoice Lists</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
                             <a href="#purchaseSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isPurchase ? 'true' : 'false' }}"
                                 class="dropdown-toggle {{ $isPurchase ? 'active' : '' }}">Purchase </a>
                             <ul class="collapse list-unstyled {{ $isPurchase ? 'show' : '' }}" id="purchaseSubmenu" data-bs-parent="#sidebar-accordion-assistant">
@@ -284,4 +309,3 @@
 
             </div>
         </nav>
-

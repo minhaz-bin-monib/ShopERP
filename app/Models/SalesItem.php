@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class SalesItem extends Model
+{
+    use HasFactory;
+
+    protected $table = 'sales_items';
+    protected $primaryKey = 'item_id';
+}
