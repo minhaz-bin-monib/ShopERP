@@ -35,7 +35,7 @@ class SalesController extends Controller
             ->orderBy('attribute_name')
             ->get();
 
-        $billNo = 'SO' . now()->format('YmdHis');
+        $billNo = 'PM' . now()->format('YmdHis');
         $url = url('/sales/create');
         $toptitle = 'Sales Order';
 

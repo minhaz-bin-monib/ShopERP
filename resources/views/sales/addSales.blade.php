@@ -290,6 +290,20 @@
             font-weight: 600;
         }
 
+        .payment-summary .form-control[readonly] {
+            background: rgba(78, 70, 60, 0.06);
+        }
+
+        .summary-totals .form-control[readonly] {
+            background: rgba(47, 111, 116, 0.08);
+        }
+
+        .payment-summary .form-control.is-negative {
+            color: #b3261e;
+            border-color: rgba(179, 38, 30, 0.45);
+            background: rgba(179, 38, 30, 0.06);
+        }
+
         .summary-toggle {
             margin-left: auto;
             border: 1px solid rgba(47, 111, 116, 0.3);
@@ -514,6 +528,12 @@
                                                 <input type="number" step="0.01" name="new_paid_amount" class="form-control" value="0">
                                             </div>
                                             <div class="form-group">
+                                                <label>Return Amount</label>
+                                                <input type="text" name="return_amount" class="form-control" value="0.00" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="summary-row summary-space-md">
+                                            <div class="form-group">
                                                 <label>Amount Due</label>
                                                 <input type="number" step="0.01" name="payable_amount" class="form-control" value="0" readonly>
                                             </div>
@@ -616,7 +636,9 @@
         const specialInput = document.querySelector('input[name="special_discount_percent"]');
         const manualInput = document.querySelector('input[name="manual_discount_percent"]');
         const loyaltyInput = document.querySelector('input[name="loyalty"]');
+        const givenInput = document.querySelector('input[name="given_amount"]');
         const paidInput = document.querySelector('input[name="paid_amount"]');
+        const returnInput = document.querySelector('input[name="return_amount"]');
 
         const recalcRow = (row) => {
             const qty = parseFloat(row.querySelector('.qty-input').value || '0');
@@ -636,9 +658,15 @@
             const loyalty = parseFloat(loyaltyInput.value || '0');
             const net = gross - (gross * special / 100) - (gross * manual / 100) - loyalty;
             const paid = parseFloat(paidInput.value || '0');
+            const given = parseFloat(givenInput.value || '0');
             grossInput.value = gross.toFixed(2);
             netInput.value = net.toFixed(2);
             payableInput.value = (net - paid).toFixed(2);
+            if (returnInput) {
+                const returned = given - paid;
+                returnInput.value = returned.toFixed(2);
+                returnInput.classList.toggle('is-negative', returned < 0);
+            }
         };
 
         const bindRowEvents = (row) => {
@@ -686,7 +714,7 @@
             bindRowEvents(row);
         });
 
-        [specialInput, manualInput, loyaltyInput, paidInput].forEach((input) => {
+        [specialInput, manualInput, loyaltyInput, givenInput, paidInput].forEach((input) => {
             input.addEventListener('input', recalcSummary);
         });
 
