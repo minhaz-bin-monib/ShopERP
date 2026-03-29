@@ -155,6 +155,9 @@ class SalesController extends Controller
             $movement->save();
         }
 
+        if ($request->input('action_print') === '1') {
+            return redirect('/sales/create')->with('print_url', url('/sales/print/' . $sales->sales_id));
+        }
         return redirect('/sales/list');
     }
 
@@ -168,5 +171,18 @@ class SalesController extends Controller
         $data = compact('sales');
 
         return view('sales.salesList')->with($data);
+    }
+
+    // [httpGet]
+    public function print($id)
+    {
+        $sales = SalesOrder::find($id);
+        if (!$sales) {
+            return redirect('/sales/list');
+        }
+        $items = SalesItem::where('sales_id', $id)->get();
+
+        $data = compact('sales', 'items');
+        return view('sales.printInvoice')->with($data);
     }
 }

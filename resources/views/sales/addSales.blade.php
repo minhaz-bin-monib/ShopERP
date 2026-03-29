@@ -337,6 +337,7 @@
             <div class="sales-body">
                 <form action="{{ $url }}" method="post" class="sales-form">
                     @csrf
+                    <input type="hidden" name="action_print" id="actionPrintFlag" value="0">
                     @if ($errors->any())
                         <div class="alert alert-danger alert-dismissible fade show" role="alert" id="salesErrorAlert">
                             @foreach ($errors->all() as $error)
@@ -697,6 +698,7 @@
         });
 
         const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+        const actionPrintFlag = document.getElementById('actionPrintFlag');
 
         if (salesForm) {
             salesForm.addEventListener('keydown', (event) => {
@@ -712,6 +714,9 @@
 
         if (confirmSaveBtn && salesForm) {
             confirmSaveBtn.addEventListener('click', () => {
+                if (actionPrintFlag) {
+                    actionPrintFlag.value = '1';
+                }
                 salesForm.submit();
             });
         }
@@ -730,6 +735,11 @@
 
         recalcRow(document.querySelector('.sales-item-row'));
         recalcSummary();
+
+        const printUrl = @json(session('print_url'));
+        if (printUrl) {
+            window.open(printUrl, '_blank');
+        }
     </script>
 
     <!-- END View Content Here -->

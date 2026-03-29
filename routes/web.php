@@ -142,4 +142,5 @@ Route::group(['prefix' => 'sales','middleware' => ['isLoggedIn','roleCheck:Admin
     Route::get('create', [SalesController::class, 'create']);
     Route::post('create', [SalesController::class, 'store']);
     Route::get('list', [SalesController::class, 'show']);
+    Route::get('print/{id}', [SalesController::class, 'print']);
 });

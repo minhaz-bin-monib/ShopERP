@@ -253,6 +253,7 @@
                             <th>Payment Details</th>
                             <th>Status</th>
                             <th>Sold By</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -270,6 +271,9 @@
                                 <td>{{ $row->payment_details ?? '-' }}</td>
                                 <td>{{ $row->status ?? '-' }}</td>
                                 <td>{{ $row->sold_by ?? '-' }}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-outline-primary" target="_blank" href="{{ url('/sales/print/' . $row->sales_id) }}">Print</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
