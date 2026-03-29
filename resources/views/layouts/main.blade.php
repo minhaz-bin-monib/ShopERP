@@ -1,6 +1,6 @@
 @include('layouts.header')
 
-<div id="content" class="p-4 p-md-4 pt-5">
+<div id="content" class="px-4 px-md-4">
     @yield('main-section')
 </div>
 </div>
