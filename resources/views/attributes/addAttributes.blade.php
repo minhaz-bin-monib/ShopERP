@@ -196,6 +196,9 @@
                                     <label for="attribute_category">Attributes Category</label>
 
                                     <select name="attribute_category" class="form-control">
+                                        <option value="Payment Method" {{ old('attribute_category', $attributes->attribute_category ?? '') == 'Payment Method' ? 'selected' : '' }}>
+                                            Payment Method
+                                        </option>
                                         <option value="Color" {{ old('attribute_category', $attributes->attribute_category ?? '') == 'Color' ? 'selected' : '' }}>
                                             Color
                                         </option>

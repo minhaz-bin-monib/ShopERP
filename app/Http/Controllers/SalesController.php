@@ -8,6 +8,7 @@ use App\Models\SalesItem;
 use App\Models\SalesOrder;
 use App\Models\StockMovement;
 use App\Models\User;
+use App\Models\Attributes;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,12 +29,17 @@ class SalesController extends Controller
             ->orderBy('customer_name')
             ->get();
         $employees = User::orderBy('name')->get();
+        $paymentMethods = Attributes::where('action_type', '!=', 'DELETE')
+            ->where('attribute_status', '!=', 'Inactive')
+            ->where('attribute_category', 'Payment Method')
+            ->orderBy('attribute_name')
+            ->get();
 
         $billNo = 'SO' . now()->format('YmdHis');
         $url = url('/sales/create');
         $toptitle = 'Sales Order';
 
-        $data = compact('sales', 'products', 'customers', 'employees', 'billNo', 'url', 'toptitle');
+        $data = compact('sales', 'products', 'customers', 'employees', 'billNo', 'url', 'toptitle', 'paymentMethods');
 
         return view('sales.addSales')->with($data);
     }

@@ -503,10 +503,14 @@
                                             <div class="form-group">
                                                 <label>Method</label>
                                                 <select name="payment_method" class="form-control">
-                                                    <option value="Cash">Cash</option>
-                                                    <option value="Bank">Bank</option>
-                                                    <option value="Bkash">Bkash</option>
-                                                    <option value="Rocket">Rocket</option>
+                                                    @forelse($paymentMethods as $method)
+                                                        <option value="{{ $method->attribute_name }}">{{ $method->attribute_name }}</option>
+                                                    @empty
+                                                        <option value="Cash">Cash</option>
+                                                        <option value="Bank">Bank</option>
+                                                        <option value="Bkash">Bkash</option>
+                                                        <option value="Rocket">Rocket</option>
+                                                    @endforelse
                                                 </select>
                                             </div>
                                             <div class="form-group">
