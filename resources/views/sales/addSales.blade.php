@@ -134,12 +134,30 @@
             background: transparent;
             font-weight: 600;
             color: var(--ink-soft);
-            padding: 6px 8px;
+            padding: 4px 6px;
         }
 
         .sales-items-table tbody td {
             border: 1px solid rgba(78, 70, 60, 0.1);
-            padding: 6px 8px;
+            padding: 4px 6px;
+        }
+
+        .sales-items-table th:nth-child(5),
+        .sales-items-table td:nth-child(5) {
+            width: 160px;
+        }
+
+        .sales-items-table .form-control,
+        .sales-items-table select {
+            height: 30px;
+            padding: 3px 6px;
+            font-size: 12px;
+        }
+
+        .sales-items-table .btn {
+            padding: 2px 6px;
+            font-size: 11px;
+            line-height: 1.2;
         }
 
         .sales-add-item {
@@ -353,8 +371,8 @@
                                         <tr>
                                             <th>Product Name</th>
                                             <th style="width: 90px;">Qty</th>
-                                            <th style="width: 110px;">Price</th>
-                                            <th style="width: 110px;">Total</th>
+                                            <th style="width: 130px;">Price</th>
+                                            <th style="width: 130px;">Total</th>
                                             <th>Remarks</th>
                                             <th style="width: 60px;">Action</th>
                                         </tr>
