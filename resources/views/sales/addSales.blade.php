@@ -72,7 +72,7 @@
             background: #ffffff;
             border: 1px solid var(--line);
             border-radius: 18px;
-            padding: 12px 14px 14px;
+            padding: 10px 12px 12px;
         }
 
         .sales-card-title {
@@ -159,6 +159,10 @@
             margin-top: 10px;
         }
 
+        .sales-actions .sales-muted {
+            margin-right: auto;
+        }
+
         .sales-btn {
             background: linear-gradient(135deg, #2f6f74, #7cc9b0);
             border: none;
@@ -185,16 +189,119 @@
 
         .sales-summary {
             display: grid;
-            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .payment-summary {
+            display: grid;
             gap: 10px;
         }
 
-        .sales-summary .form-group {
+        .summary-grid {
+            display: grid;
+            gap: 8px;
+        }
+
+        .summary-block {
+            border: 1px dashed rgba(78, 70, 60, 0.2);
+            border-radius: 16px;
+            padding: 8px 10px;
+            background: #fffdf9;
+        }
+
+        .summary-block h5 {
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(31, 27, 22, 0.65);
             margin-bottom: 6px;
+        }
+
+        .summary-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .summary-row.three {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .summary-row .form-group {
+            margin-bottom: 0;
+        }
+
+        .summary-inline {
+            display: grid;
+            gap: 8px;
+        }
+
+        .summary-inline .form-group {
+            margin-bottom: 0;
+        }
+
+        .summary-space-sm {
+            margin-top: 6px;
+        }
+
+        .summary-space-md {
+            margin-top: 8px;
+        }
+
+        .summary-totals {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .summary-totals .form-group {
+            margin-bottom: 0;
+            display: grid;
+            grid-template-columns: 0.35fr 1fr;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .summary-totals .form-group label {
+            margin-bottom: 0;
+        }
+
+        .summary-totals .form-control[readonly] {
+            background: rgba(47, 111, 116, 0.08);
+            font-weight: 600;
+        }
+
+        .summary-toggle {
+            margin-left: auto;
+            border: 1px solid rgba(47, 111, 116, 0.3);
+            background: rgba(47, 111, 116, 0.08);
+            color: var(--sea);
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
+
+        .summary-toggle:hover {
+            background: rgba(47, 111, 116, 0.15);
+        }
+
+        .summary-hidden {
+            display: none;
         }
 
         @media (max-width: 991px) {
             .sales-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-row {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-row.three {
                 grid-template-columns: 1fr;
             }
         }
@@ -212,6 +319,14 @@
             <div class="sales-body">
                 <form action="{{ $url }}" method="post" class="sales-form">
                     @csrf
+                    @if ($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert" id="salesErrorAlert">
+                            @foreach ($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
                     <div class="sales-grid">
                         <div class="sales-card">
                             <div class="sales-card-title"><span></span>Sales Items</div>
@@ -314,86 +429,134 @@
                         </div>
 
                         <div class="sales-card">
-                            <div class="sales-card-title"><span></span>Payment Summary</div>
-                            <div class="sales-summary">
-                                <div class="form-group">
-                                    <label>Special Discount %</label>
-                                    <input type="number" step="0.01" name="special_discount_percent" class="form-control" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label>Offer</label>
-                                    <input type="text" name="offer" class="form-control" placeholder="Apply Offer">
-                                </div>
-                                <div class="form-group">
-                                    <label>Gross</label>
-                                    <input type="number" step="0.01" name="gross_amount" class="form-control" value="0" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label>Loyalty</label>
-                                    <input type="number" step="0.01" name="loyalty" class="form-control" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label>Manual Discount %</label>
-                                    <input type="number" step="0.01" name="manual_discount_percent" class="form-control" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label>Net Amount</label>
-                                    <input type="number" step="0.01" name="net_amount" class="form-control" value="0" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label>Method</label>
-                                    <select name="payment_method" class="form-control">
-                                        <option value="Cash">Cash</option>
-                                        <option value="Bank">Bank</option>
-                                        <option value="Bkash">Bkash</option>
-                                        <option value="Rocket">Rocket</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Details</label>
-                                    <input type="text" name="payment_details" class="form-control" placeholder="Cheque No, Bank Name, Bkash No, Rocket No, Pure No, Etc..">
-                                </div>
-                                <div class="form-group">
-                                    <label>Bonus</label>
-                                    <input type="text" name="bonus_card" class="form-control" placeholder="Scan Card">
-                                </div>
-                                <div class="form-group">
-                                    <label>Given</label>
-                                    <input type="number" step="0.01" name="given_amount" class="form-control" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label>Paid Amount</label>
-                                    <input type="number" step="0.01" name="paid_amount" class="form-control" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label>New Paid Amount</label>
-                                    <input type="number" step="0.01" name="new_paid_amount" class="form-control" value="0">
-                                </div>
-                                <div class="form-group">
-                                    <label>Payable</label>
-                                    <input type="number" step="0.01" name="payable_amount" class="form-control" value="0" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label>Status</label>
-                                    <select name="status" class="form-control">
-                                        <option value="Paid">Paid</option>
-                                        <option value="Unpaid">Unpaid</option>
-                                        <option value="Partial">Partial</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Reference</label>
-                                    <input type="text" name="reference" class="form-control" value="0">
+                            <div class="sales-card-title">
+                                <span></span>Payment Summary
+                                <button type="button" class="summary-toggle" id="toggleDiscountsBtn">Show Discounts</button>
+                            </div>
+                            <div class="payment-summary">
+                                <div class="summary-grid">
+                                    <div class="summary-block summary-hidden" id="discountsBlock">
+                                        <h5>Discounts & Offers</h5>
+                                        <div class="summary-row">
+                                            <div class="form-group">
+                                                <label>Special Discount %</label>
+                                                <input type="number" step="0.01" name="special_discount_percent" class="form-control" value="0">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Manual Discount %</label>
+                                                <input type="number" step="0.01" name="manual_discount_percent" class="form-control" value="0">
+                                            </div>
+                                        </div>
+                                        <div class="summary-row three summary-space-sm">
+                                            <div class="form-group">
+                                                <label>Offer</label>
+                                                <input type="text" name="offer" class="form-control" placeholder="Apply Offer">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Loyalty</label>
+                                                <input type="number" step="0.01" name="loyalty" class="form-control" value="0">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Bonus</label>
+                                                <input type="text" name="bonus_card" class="form-control" placeholder="Scan Card">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="summary-block">
+                                        <h5>Totals</h5>
+                                        <div class="summary-totals">
+                                            <div class="form-group">
+                                                <label>Gross</label>
+                                                <input type="number" step="0.01" name="gross_amount" class="form-control" value="0" readonly>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Net Amount</label>
+                                                <input type="number" step="0.01" name="net_amount" class="form-control" value="0" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="summary-block">
+                                        <h5>Payment</h5>
+                                        <div class="summary-row summary-space-md">
+                                            <div class="form-group">
+                                                <label>Given</label>
+                                                <input type="number" step="0.01" name="given_amount" class="form-control" value="0">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Paid Amount</label>
+                                                <input type="number" step="0.01" name="paid_amount" class="form-control" value="0">
+                                            </div>
+                                        </div>
+                                        <div class="summary-row summary-space-md">
+                                            <div class="form-group">
+                                                <label>New Paid Amount</label>
+                                                <input type="number" step="0.01" name="new_paid_amount" class="form-control" value="0">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Amount Due</label>
+                                                <input type="number" step="0.01" name="payable_amount" class="form-control" value="0" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="summary-row summary-space-md">
+                                            <div class="form-group">
+                                                <label>Method</label>
+                                                <select name="payment_method" class="form-control">
+                                                    <option value="Cash">Cash</option>
+                                                    <option value="Bank">Bank</option>
+                                                    <option value="Bkash">Bkash</option>
+                                                    <option value="Rocket">Rocket</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Details</label>
+                                                <input type="text" name="payment_details" class="form-control" placeholder="Cheque No, Bank Name, Bkash No, Rocket No, Pure No, Etc..">
+                                            </div>
+                                        </div>
+                                        <div class="summary-row summary-space-md">
+                                            <div class="form-group">
+                                                <label>Reference</label>
+                                                <input type="text" name="reference" class="form-control" value="0">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Status</label>
+                                                <select name="status" class="form-control">
+                                                    <option value="Paid">Paid</option>
+                                                    <option value="Unpaid">Unpaid</option>
+                                                    <option value="Partial">Partial</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <input type="hidden" name="sold_by" value="{{ session('loginId') }}">
-                            <div class="sales-actions">
-                                <button type="submit" class="sales-btn">Save & Print</button>
-                                <div class="sales-muted">Sales order will be saved and added to invoice list.</div>
-                            </div>
                         </div>
                     </div>
+                    <div class="sales-actions">
+                        <div class="sales-muted">Sales order will be saved and added to invoice list.</div>
+                        <button type="button" class="sales-btn" data-bs-toggle="modal" data-bs-target="#saveSalesModal">Save & Print</button>
+                    </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="saveSalesModal" tabindex="-1" aria-labelledby="saveSalesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="saveSalesModalLabel">Confirm Save</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Save this sales order now?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmSaveBtn">Save & Print</button>
+                </div>
             </div>
         </div>
     </div>
@@ -404,8 +567,21 @@
             pageName.innerText = '{{ $toptitle }}';
         }
 
+        const discountsBlock = document.getElementById('discountsBlock');
+        const toggleDiscountsBtn = document.getElementById('toggleDiscountsBtn');
+
+        if (toggleDiscountsBtn && discountsBlock) {
+            toggleDiscountsBtn.addEventListener('click', () => {
+                discountsBlock.classList.toggle('summary-hidden');
+                toggleDiscountsBtn.innerText = discountsBlock.classList.contains('summary-hidden')
+                    ? 'Show Discounts'
+                    : 'Hide Discounts';
+            });
+        }
+
         const salesItemsTable = document.getElementById('salesItemsTable');
         const addItemBtn = document.getElementById('addItemBtn');
+        const salesForm = document.querySelector('form.sales-form');
         const customerSelect = document.getElementById('customerSelect');
         const customerName = document.getElementById('customerName');
         const customerPhone = document.getElementById('customerPhone');
@@ -416,6 +592,7 @@
         const payableInput = document.querySelector('input[name="payable_amount"]');
         const specialInput = document.querySelector('input[name="special_discount_percent"]');
         const manualInput = document.querySelector('input[name="manual_discount_percent"]');
+        const loyaltyInput = document.querySelector('input[name="loyalty"]');
         const paidInput = document.querySelector('input[name="paid_amount"]');
 
         const recalcRow = (row) => {
@@ -433,7 +610,8 @@
             });
             const special = parseFloat(specialInput.value || '0');
             const manual = parseFloat(manualInput.value || '0');
-            const net = gross - (gross * special / 100) - (gross * manual / 100);
+            const loyalty = parseFloat(loyaltyInput.value || '0');
+            const net = gross - (gross * special / 100) - (gross * manual / 100) - loyalty;
             const paid = parseFloat(paidInput.value || '0');
             grossInput.value = gross.toFixed(2);
             netInput.value = net.toFixed(2);
@@ -485,7 +663,7 @@
             bindRowEvents(row);
         });
 
-        [specialInput, manualInput, paidInput].forEach((input) => {
+        [specialInput, manualInput, loyaltyInput, paidInput].forEach((input) => {
             input.addEventListener('input', recalcSummary);
         });
 
@@ -495,6 +673,38 @@
             customerAddress.value = option ? option.getAttribute('data-address') || '' : '';
             customerPhone.value = option ? option.getAttribute('data-phone') || '' : '';
         });
+
+        const confirmSaveBtn = document.getElementById('confirmSaveBtn');
+
+        if (salesForm) {
+            salesForm.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter') {
+                    const target = event.target;
+                    const isTextArea = target && target.tagName === 'TEXTAREA';
+                    if (!isTextArea) {
+                        event.preventDefault();
+                    }
+                }
+            });
+        }
+
+        if (confirmSaveBtn && salesForm) {
+            confirmSaveBtn.addEventListener('click', () => {
+                salesForm.submit();
+            });
+        }
+
+        const salesErrorAlert = document.getElementById('salesErrorAlert');
+        if (salesErrorAlert) {
+            salesErrorAlert.addEventListener('closed.bs.alert', () => {
+                salesErrorAlert.remove();
+            });
+            setTimeout(() => {
+                if (salesErrorAlert.parentElement) {
+                    salesErrorAlert.remove();
+                }
+            }, 5000);
+        }
 
         recalcRow(document.querySelector('.sales-item-row'));
         recalcSummary();

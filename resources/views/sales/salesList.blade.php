@@ -162,6 +162,7 @@
             padding: 6px 10px;
         }
 
+
         #salesTable tbody tr {
             background: #ffffff;
             border: 1px solid var(--line);
@@ -240,6 +241,7 @@
                 <table id="salesTable" class="table table-borderless">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>Date</th>
                             <th>Customer Name</th>
                             <th>Customer ID</th>
@@ -256,6 +258,7 @@
                     <tbody>
                         @foreach($sales as $row)
                             <tr>
+                                <td>{{ $row->sales_id }}</td>
                                 <td>{{ $row->sales_date }}</td>
                                 <td>{{ $row->customer_name ?? '-' }}</td>
                                 <td>{{ $row->customer_id ?? '-' }}</td>
@@ -284,6 +287,7 @@
                 $('#salesTable').DataTable({
                     pageLength: 10,
                     order: [[0, 'desc']],
+                    columnDefs: [{ targets: 0, visible: false, searchable: false }],
                 });
                 return;
             }
@@ -291,6 +295,7 @@
                 new DataTable('#salesTable', {
                     pageLength: 10,
                     order: [[0, 'desc']],
+                    columnDefs: [{ targets: 0, visible: false, searchable: false }],
                 });
             }
         });

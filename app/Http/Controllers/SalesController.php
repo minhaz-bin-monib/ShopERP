@@ -44,9 +44,17 @@ class SalesController extends Controller
         $request->validate([
             'sales_date' => 'required|date',
             'product_id' => 'required|array|min:1',
-            'product_id.*' => 'required',
+            'product_id.*' => 'required|exists:products,product_id',
             'qty' => 'required|array|min:1',
-            'qty.*' => 'required|numeric'
+            'qty.*' => 'required|numeric|gt:0'
+        ], [
+            'product_id.required' => 'Please add at least one product.',
+            'product_id.*.required' => 'Please select a product for each row.',
+            'product_id.*.exists' => 'Selected product is not valid.',
+            'qty.required' => 'Please add quantity for each product.',
+            'qty.*.required' => 'Quantity is required for each product.',
+            'qty.*.numeric' => 'Quantity must be a number.',
+            'qty.*.gt' => 'Quantity must be greater than 0.'
         ]);
 
         $userId = $request->session()->get('loginId') ?? 'sys-user';
@@ -74,6 +82,9 @@ class SalesController extends Controller
                 'total' => $total,
                 'remarks' => $request->remarks[$index] ?? null
             ];
+        }
+        if (count($items) === 0) {
+            return back()->withErrors(['product_id' => 'Please add at least one valid product.'])->withInput();
         }
 
         $specialPercent = (float) ($request->special_discount_percent ?? 0);
