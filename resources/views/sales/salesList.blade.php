@@ -202,7 +202,7 @@
             border-collapse: separate;
             border-spacing: 0 6px;
             font-family: 'Manrope', Arial, sans-serif;
-            font-size: 14px;
+            font-size: 12px;
             color: var(--ink);
             table-layout: fixed;
             width: 100%;
@@ -236,12 +236,26 @@
             border-bottom-left-radius: 12px;
             font-weight: 600;
             color: var(--ink-soft);
+            font-size: 9px;
         }
 
         #salesTable tbody td:last-child {
             border-right: 1px solid var(--line);
             border-top-right-radius: 12px;
             border-bottom-right-radius: 12px;
+        }
+
+        #salesTable tbody td:last-child .btn {
+            padding: 2px 8px;
+            font-size: 11px;
+            line-height: 1.2;
+        }
+
+        #salesTable thead th:nth-child(2),
+        #salesTable tbody td:nth-child(2) {
+            white-space: nowrap;
+            width: 110px;
+            font-size: 11px;
         }
 
         @media (max-width: 900px) {
