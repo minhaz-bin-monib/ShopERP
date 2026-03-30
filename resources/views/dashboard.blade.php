@@ -54,6 +54,10 @@
         padding: 18px 18px 24px;
     }
 
+    .dash-hidden {
+        display: none;
+    }
+
     .dash-grid--three {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         padding-top: 0;
@@ -184,7 +188,7 @@
             <h2 class="dash-title">Dashboard Overview</h2>
         </div>
 
-        <div class="dash-grid">
+        <div class="dash-grid dash-hidden">
             <div class="metric-card">
                 <div class="metric-head">
                     <div class="metric-title">Total Purchase</div>
@@ -266,7 +270,7 @@
             </div>
         </div>
 
-        <div class="dash-grid dash-grid--three">
+        <div class="dash-grid dash-grid--three dash-hidden">
             <div class="metric-card">
                 <div class="metric-head">
                     <div class="metric-title">Products</div>

@@ -347,6 +347,7 @@
                                                 @foreach ($products as $prod)
                                                     <option value="{{ $prod['product_id'] }}"
                                                         data-unit-price="{{ $prod['purchase_price'] ?? '' }}"
+                                                        data-selling-price="{{ $prod['selling_price'] ?? '' }}"
                                                         {{ old('product', $purchase->product ?? '') == $prod['product_id'] ? 'selected' : '' }}>
                                                         {{ $prod['product_name'] }}
                                                     </option>
@@ -580,6 +581,7 @@
         }
         const qtyInput = document.querySelector('input[name="quantity"]');
         const unitInput = document.querySelector('input[name="unit_price"]');
+        const sellingInput = document.querySelector('input[name="selling_price"]');
         const totalInput = document.querySelector('input[name="total_price"]');
         const productSelect = document.getElementById('purchaseProduct');
 
@@ -595,16 +597,24 @@
             }
         };
 
-        const updateUnitPriceFromProduct = () => {
-            if (!productSelect || !unitInput) {
+        const updatePricesFromProduct = () => {
+            if (!productSelect) {
                 return;
             }
             const selected = productSelect.options[productSelect.selectedIndex];
-            const price = selected ? selected.getAttribute('data-unit-price') : '';
-            if (price !== null && price !== '') {
-                unitInput.value = parseFloat(price).toFixed(2);
-                updateTotalPrice();
+            if (unitInput) {
+                const unitPrice = selected ? selected.getAttribute('data-unit-price') : '';
+                if (unitPrice !== null && unitPrice !== '') {
+                    unitInput.value = parseFloat(unitPrice).toFixed(2);
+                }
             }
+            if (sellingInput) {
+                const sellingPrice = selected ? selected.getAttribute('data-selling-price') : '';
+                if (sellingPrice !== null && sellingPrice !== '') {
+                    sellingInput.value = parseFloat(sellingPrice).toFixed(2);
+                }
+            }
+            updateTotalPrice();
         };
 
         if (qtyInput && unitInput) {
@@ -612,8 +622,8 @@
             unitInput.addEventListener('input', updateTotalPrice);
         }
         if (productSelect) {
-            productSelect.addEventListener('change', updateUnitPriceFromProduct);
-            updateUnitPriceFromProduct();
+            productSelect.addEventListener('change', updatePricesFromProduct);
+            updatePricesFromProduct();
         }
         document.addEventListener('DOMContentLoaded', function () {
             if (window.jQuery && $.fn.DataTable) {

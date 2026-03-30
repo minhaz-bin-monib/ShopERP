@@ -190,7 +190,14 @@ class PurchaseController extends Controller
         $purchase->quantity = $request['quantity'];
         $purchase->unit_price = $request['unit_price'];
         $purchase->profit_percent = $request['profit_percent'];
-        $purchase->selling_price = $request['selling_price'];
+        $sellingPrice = $request['selling_price'];
+        if ($sellingPrice === null || $sellingPrice === '') {
+            $product = $purchase->product ? Product::find($purchase->product) : null;
+            if ($product && $product->selling_price !== null && $product->selling_price !== '') {
+                $sellingPrice = $product->selling_price;
+            }
+        }
+        $purchase->selling_price = $sellingPrice;
         $totalPrice = $request['total_price'];
         if ($totalPrice === null || $totalPrice === '') {
             $qty = (float) ($request['quantity'] ?? 0);
@@ -247,7 +254,14 @@ class PurchaseController extends Controller
         $purchase->quantity = $request['quantity'];
         $purchase->unit_price = $request['unit_price'];
         $purchase->profit_percent = $request['profit_percent'];
-        $purchase->selling_price = $request['selling_price'];
+        $sellingPrice = $request['selling_price'];
+        if ($sellingPrice === null || $sellingPrice === '') {
+            $product = $purchase->product ? Product::find($purchase->product) : null;
+            if ($product && $product->selling_price !== null && $product->selling_price !== '') {
+                $sellingPrice = $product->selling_price;
+            }
+        }
+        $purchase->selling_price = $sellingPrice;
         $totalPrice = $request['total_price'];
         if ($totalPrice === null || $totalPrice === '') {
             $qty = (float) ($request['quantity'] ?? 0);
