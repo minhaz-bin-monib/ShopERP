@@ -228,6 +228,7 @@
             border-top: 1px solid var(--line);
             border-bottom: 1px solid var(--line);
             border-right: 1px solid rgba(78, 70, 60, 0.08);
+            font-size: 11px;
         }
 
         #salesTable tbody td:first-child {
