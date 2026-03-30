@@ -77,6 +77,29 @@
             padding: 8px 16px 18px;
         }
 
+        .dt-top,
+        .dt-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 6px 0;
+        }
+
+        .dt-top .dt-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .dt-top .dt-length,
+        .dt-bottom .dt-length {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
         .dt-container .dt-layout-row {
             display: flex;
             align-items: center;
@@ -120,6 +143,37 @@
             border: 1px solid var(--line);
             padding: 4px 8px;
             font-size: 14px;
+        }
+
+        .dt-container .dt-buttons .dt-button {
+            overflow: visible;
+            text-overflow: initial;
+            white-space: nowrap;
+        }
+
+        .dt-container .dt-buttons .btn,
+        .dt-container .dt-buttons .dt-button {
+            border-radius: 999px;
+            border: 0;
+            font-family: 'Manrope', Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 12px;
+            box-shadow: 0 12px 26px rgba(28, 23, 16, 0.16);
+            transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+        }
+
+        .dt-container .dt-buttons .btn:hover,
+        .dt-container .dt-buttons .dt-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 16px 30px rgba(28, 23, 16, 0.2);
+            filter: brightness(1.03);
+        }
+
+        .dt-container .dt-buttons .dt-button:focus,
+        .dt-container .dt-buttons .dt-button:active {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47, 111, 116, 0.25), 0 12px 26px rgba(28, 23, 16, 0.16);
         }
 
         .dt-container .dt-paging .dt-paging-button {
@@ -289,6 +343,47 @@
         document.addEventListener('DOMContentLoaded', function () {
             if (window.jQuery && $.fn.DataTable) {
                 $('#salesTable').DataTable({
+                    dom: "<'dt-top'Blf>rt<'dt-bottom'ip>",
+                    buttons: [
+                        { extend: 'copyHtml5', text: 'Copy', className: 'btn btn-sm btn-primary', exportOptions: { columns: ':not(:last-child)' } },
+                        { extend: 'csvHtml5', text: 'CSV', className: 'btn btn-sm btn-warning', exportOptions: { columns: ':not(:last-child)' } },
+                        { extend: 'excelHtml5', text: 'Excel', className: 'btn btn-sm btn-success', exportOptions: { columns: ':not(:last-child)' } },
+                        { extend: 'pdfHtml5', text: 'PDF', className: 'btn btn-sm btn-danger', exportOptions: { columns: ':not(:last-child)' },
+                            customize: function (doc) {
+                                doc.pageOrientation = 'landscape';
+                                doc.pageSize = 'A3';
+                                doc.pageMargins = [18, 18, 18, 18];
+                                doc.defaultStyle.fontSize = 8;
+                                doc.styles.tableHeader.fontSize = 9;
+                                doc.styles.tableHeader.noWrap = false;
+                                doc.styles.tableHeader.alignment = 'center';
+                                const tableBody = doc.content.find(item => item.table && item.table.body);
+                                if (tableBody && tableBody.table && tableBody.table.body) {
+                                    const header = tableBody.table.body[0];
+                                    if (header && Array.isArray(header)) {
+                                        tableBody.table.body[0] = header.map(cell => {
+                                            const rawText = cell && typeof cell === 'object' ? cell.text : cell;
+                                            const value = String(rawText || '');
+                                            const wrapped = value
+                                                .replace('Customer Name', 'Customer\nName')
+                                                .replace('Customer ID', 'Customer\nID')
+                                                .replace('Bill No', 'Bill\nNo')
+                                                .replace('Total Cost', 'Total\nCost')
+                                                .replace('Payment Details', 'Payment\nDetails');
+                                            if (cell && typeof cell === 'object') {
+                                                return { ...cell, text: wrapped };
+                                            }
+                                            return wrapped;
+                                        });
+                                    }
+                                    const columnCount = tableBody.table.body[0].length;
+                                    tableBody.table.widths = Array(columnCount).fill('*');
+                                }
+                            }
+                        },
+                        { extend: 'print', text: 'Print', className: 'btn btn-sm btn-secondary', exportOptions: { columns: ':not(:last-child)' } },
+                    ],
+                    lengthMenu: [10, 20, 50, 100],
                     pageLength: 10,
                     order: [[0, 'desc']],
                     columnDefs: [{ targets: 0, visible: false, searchable: false }],
@@ -297,6 +392,47 @@
             }
             if (window.DataTable) {
                 new DataTable('#salesTable', {
+                    dom: "<'dt-top'Blf>rt<'dt-bottom'ip>",
+                    buttons: [
+                        { extend: 'copyHtml5', text: 'Copy', className: 'btn btn-sm btn-primary', exportOptions: { columns: ':not(:last-child)' } },
+                        { extend: 'csvHtml5', text: 'CSV', className: 'btn btn-sm btn-warning', exportOptions: { columns: ':not(:last-child)' } },
+                        { extend: 'excelHtml5', text: 'Excel', className: 'btn btn-sm btn-success', exportOptions: { columns: ':not(:last-child)' } },
+                        { extend: 'pdfHtml5', text: 'PDF', className: 'btn btn-sm btn-danger', exportOptions: { columns: ':not(:last-child)' },
+                            customize: function (doc) {
+                                doc.pageOrientation = 'landscape';
+                                doc.pageSize = 'A3';
+                                doc.pageMargins = [18, 18, 18, 18];
+                                doc.defaultStyle.fontSize = 8;
+                                doc.styles.tableHeader.fontSize = 9;
+                                doc.styles.tableHeader.noWrap = false;
+                                doc.styles.tableHeader.alignment = 'center';
+                                const tableBody = doc.content.find(item => item.table && item.table.body);
+                                if (tableBody && tableBody.table && tableBody.table.body) {
+                                    const header = tableBody.table.body[0];
+                                    if (header && Array.isArray(header)) {
+                                        tableBody.table.body[0] = header.map(cell => {
+                                            const rawText = cell && typeof cell === 'object' ? cell.text : cell;
+                                            const value = String(rawText || '');
+                                            const wrapped = value
+                                                .replace('Customer Name', 'Customer\nName')
+                                                .replace('Customer ID', 'Customer\nID')
+                                                .replace('Bill No', 'Bill\nNo')
+                                                .replace('Total Cost', 'Total\nCost')
+                                                .replace('Payment Details', 'Payment\nDetails');
+                                            if (cell && typeof cell === 'object') {
+                                                return { ...cell, text: wrapped };
+                                            }
+                                            return wrapped;
+                                        });
+                                    }
+                                    const columnCount = tableBody.table.body[0].length;
+                                    tableBody.table.widths = Array(columnCount).fill('*');
+                                }
+                            }
+                        },
+                        { extend: 'print', text: 'Print', className: 'btn btn-sm btn-secondary', exportOptions: { columns: ':not(:last-child)' } },
+                    ],
+                    lengthMenu: [10, 20, 50, 100],
                     pageLength: 10,
                     order: [[0, 'desc']],
                     columnDefs: [{ targets: 0, visible: false, searchable: false }],

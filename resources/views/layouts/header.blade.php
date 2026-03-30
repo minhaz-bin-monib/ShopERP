@@ -16,6 +16,21 @@
     <link rel="stylesheet" href="{{ asset('bootstrap/css/select.css') }}">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bootstrap/css/style.css') }}">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="{{ asset('datatable/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('datatable/css/buttons.bootstrap5.min.css') }}">
+
+    <!-- jQuery and DataTables JS -->
+    <script src="{{ asset('datatable/js/jquery-3.6.4.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/dataTables.bootstrap5.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/jszip.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('datatable/js/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('datatable/js/buttons.print.min.js') }}"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap');
 
