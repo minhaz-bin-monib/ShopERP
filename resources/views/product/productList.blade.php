@@ -200,7 +200,7 @@
 
         #myTable th:nth-child(1),
         #myTable td:nth-child(1) {
-            width: 56px;
+            width: 100px;
         }
 
         #myTable th:nth-child(2),
@@ -324,7 +324,7 @@
                     <tbody>
                         @foreach($products as  $prod)
                         <tr>
-                            <td style="width: 150px;">{{ $prod->product_id }}</td>
+                            <td style="width: 120px;">{{ $prod->product_id }}</td>
                             <td style="width: 52px;">
                                 <a class="cat-edit" href="{{url('/product/edit')}}/{{$prod->product_id}}"><i class="fa fa-edit"></i></a>
                             </td>

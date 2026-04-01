@@ -203,7 +203,7 @@
 
         #myTable th:nth-child(1),
         #myTable td:nth-child(1) {
-            width: 56px;
+            width: 100px;
         }
 
         #myTable th:nth-child(2),
