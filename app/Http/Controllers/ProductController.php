@@ -14,7 +14,9 @@ class ProductController extends Controller
     // [httpGet]
     public function show()
     {
-        $products = Product::where('action_type', '!=', 'DELETE')
+        $products = Product::leftJoin('suppliers as s', 'products.supplier', '=', 's.supplier_id')
+            ->select('products.*', 's.supplier_name')
+            ->where('products.action_type', '!=', 'DELETE')
             ->orderBy('product_id', 'desc')
             ->get();
 

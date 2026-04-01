@@ -314,6 +314,9 @@
                             <th>Product ID</th>
                             <th style="width: 52px;">Edit</th>
                             <th>Name</th>
+                            <th>Code</th>
+                            <th>Supplier</th>
+                            <th>Selling Price</th>
                             <th style="width: 84px;">Status</th>
                             {{-- <th>Action</th> --}}
                         </tr>
@@ -321,11 +324,14 @@
                     <tbody>
                         @foreach($products as  $prod)
                         <tr>
-                            <td style="width: 56px;">{{ $prod->product_id }}</td>
+                            <td style="width: 150px;">{{ $prod->product_id }}</td>
                             <td style="width: 52px;">
                                 <a class="cat-edit" href="{{url('/product/edit')}}/{{$prod->product_id}}"><i class="fa fa-edit"></i></a>
                             </td>
                             <td>{{$prod->product_name}}</td>
+                            <td>{{$prod->product_code}}</td>
+                            <td>{{ $prod->supplier_name ?? $prod->supplier }}</td>
+                            <td>{{ number_format($prod->selling_price, 2) }}</td>
                             <td>
                                 <span class="cat-status {{ $prod->product_status === 'Active' ? 'cat-active' : 'cat-inactive' }}">
                                     {{ $prod->product_status }}
