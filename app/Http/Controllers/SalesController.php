@@ -180,7 +180,11 @@ class SalesController extends Controller
         if (!$sales) {
             return redirect('/sales/list');
         }
-        $items = SalesItem::where('sales_id', $id)->get();
+        $items = DB::table('sales_items as si')
+            ->leftJoin('products as p', 'p.product_id', '=', 'si.product_id')
+            ->where('si.sales_id', $id)
+            ->select('si.*', 'p.product_code', 'p.unit_type')
+            ->get();
 
         $data = compact('sales', 'items');
         return view('sales.printInvoice')->with($data);
