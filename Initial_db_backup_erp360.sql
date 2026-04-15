@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2026 at 06:52 PM
+-- Generation Time: Apr 15, 2026 at 08:46 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -281,7 +281,19 @@ INSERT INTO `attributes` (`attribute_id`, `attribute_name`, `attribute_category`
 (243, 'Beauty', 'Department', 'Active', 'Insert', '1', '2026-04-01', '2026-04-01 15:09:26', '2026-04-01 15:09:26'),
 (244, 'Catagory1', 'Department', 'Active', 'Insert', '1', '2026-04-01', '2026-04-01 15:09:26', '2026-04-01 15:09:26'),
 (245, 'Girls Frocks', 'Department', 'Active', 'Insert', '1', '2026-04-01', '2026-04-01 15:09:26', '2026-04-01 15:09:26'),
-(246, 'American Eagle', 'Department', 'Active', 'Insert', '1', '2026-04-01', '2026-04-01 15:09:26', '2026-04-01 15:09:26');
+(246, 'American Eagle', 'Department', 'Active', 'Insert', '1', '2026-04-01', '2026-04-01 15:09:26', '2026-04-01 15:09:26'),
+(247, 'Cash', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(248, 'Cheque', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(249, 'Debit Card', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(250, 'Credit Card', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(251, 'Bkash', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(252, 'Rocket', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(253, 'Pure', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(254, 'LC Payment', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(255, 'Nagad', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(256, 'UCB Bank', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(257, 'City Bank', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06'),
+(258, 'Pending...', 'Payment Method', 'Active', 'Insert', '1', '2026-04-14', '2026-04-14 14:43:06', '2026-04-14 14:43:06');
 
 -- --------------------------------------------------------
 
@@ -1365,7 +1377,8 @@ INSERT INTO `sales_items` (`item_id`, `sales_id`, `product_id`, `product_name`, 
 (19, 19, 1, 'Product B', 2.00, 423.00, 846.00, NULL, 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:01:29', '2026-03-29 13:01:29'),
 (20, 19, 1, 'Product B', 1.00, 423.00, 423.00, NULL, 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:01:29', '2026-03-29 13:01:29'),
 (21, 20, 1, 'Product B', 1.00, 423.00, 423.00, NULL, 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:06:50', '2026-03-29 13:06:50'),
-(22, 21, 1, 'Product B', 1.00, 423.00, 423.00, NULL, 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:07:37', '2026-03-29 13:07:37');
+(22, 21, 1, 'Product B', 1.00, 423.00, 423.00, NULL, 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:07:37', '2026-03-29 13:07:37'),
+(23, 22, 61, 'Boys Half Pant 10-11 Years', 1.00, 550.00, 550.00, NULL, 'INSERT', 'admin@gmail.com', '2026-04-15', '2026-04-15 12:20:59', '2026-04-15 12:20:59');
 
 -- --------------------------------------------------------
 
@@ -1430,7 +1443,8 @@ INSERT INTO `sales_orders` (`sales_id`, `sales_date`, `customer_id`, `customer_n
 (18, '2026-03-29', NULL, NULL, NULL, NULL, 'PM20260329185709', 'Admin', 'admin@gmail.com', '0', 0.00, NULL, 846.00, 0.00, 0.00, 846.00, 'Cash', NULL, NULL, 500.00, 846.00, 0.00, 0.00, 'Paid', 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 12:57:59', '2026-03-29 12:57:59'),
 (19, '2026-03-29', NULL, NULL, NULL, NULL, 'PM20260329185759', NULL, 'admin@gmail.com', '0', 5.00, NULL, 1269.00, 100.00, 0.00, 1105.55, 'Cash', NULL, NULL, 500.00, 600.00, 0.00, 505.55, 'Paid', 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:01:29', '2026-03-29 13:01:29'),
 (20, '2026-03-29', NULL, NULL, NULL, NULL, 'PM20260329190401', NULL, 'admin@gmail.com', '0', 0.00, NULL, 423.00, 100.00, 0.00, 323.00, 'Cash', NULL, NULL, 500.00, 600.00, 0.00, -277.00, 'Paid', 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:06:50', '2026-03-29 13:06:50'),
-(21, '2026-03-29', NULL, NULL, NULL, NULL, 'PM20260329190651', NULL, 'admin@gmail.com', '0', 5.00, NULL, 423.00, 0.00, 0.00, 401.85, 'Cash', NULL, NULL, 50.00, 100.00, 0.00, 301.85, 'Paid', 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:07:37', '2026-03-29 13:07:37');
+(21, '2026-03-29', NULL, NULL, NULL, NULL, 'PM20260329190651', NULL, 'admin@gmail.com', '0', 5.00, NULL, 423.00, 0.00, 0.00, 401.85, 'Cash', NULL, NULL, 50.00, 100.00, 0.00, 301.85, 'Paid', 'INSERT', 'admin@gmail.com', '2026-03-29', '2026-03-29 13:07:37', '2026-03-29 13:07:37'),
+(22, '2026-04-15', 336, 'Abdul Hakim', NULL, '01816535222', 'PM20260415182005', 'Admin', 'admin@gmail.com', '0', 0.00, NULL, 550.00, 0.00, 0.00, 550.00, 'Cash', NULL, NULL, 1000.00, 550.00, 0.00, 0.00, 'Paid', 'INSERT', 'admin@gmail.com', '2026-04-15', '2026-04-15 12:20:59', '2026-04-15 12:20:59');
 
 -- --------------------------------------------------------
 
@@ -1480,7 +1494,8 @@ INSERT INTO `stock_movements` (`movement_id`, `product_id`, `movement_type`, `qt
 (20, 1, 'OUT', 1.00, NULL, 423.00, 'sales', 19, 'admin@gmail.com', '2026-03-29', '2026-03-29 13:01:29', '2026-03-29 13:01:29'),
 (21, 1, 'OUT', 1.00, NULL, 423.00, 'sales', 20, 'admin@gmail.com', '2026-03-29', '2026-03-29 13:06:50', '2026-03-29 13:06:50'),
 (22, 1, 'OUT', 1.00, NULL, 423.00, 'sales', 21, 'admin@gmail.com', '2026-03-29', '2026-03-29 13:07:37', '2026-03-29 13:07:37'),
-(23, 1, 'IN', 10.00, 200.00, 430.00, 'purchase', 7, 'admin@gmail.com', '2026-03-30', '2026-03-30 10:53:52', '2026-03-30 10:53:52');
+(23, 1, 'IN', 10.00, 200.00, 430.00, 'purchase', 7, 'admin@gmail.com', '2026-03-30', '2026-03-30 10:53:52', '2026-03-30 10:53:52'),
+(24, 61, 'OUT', 1.00, NULL, 550.00, 'sales', 22, 'admin@gmail.com', '2026-04-15', '2026-04-15 12:20:59', '2026-04-15 12:20:59');
 
 -- --------------------------------------------------------
 
@@ -1673,7 +1688,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attributes`
 --
 ALTER TABLE `attributes`
-  MODIFY `attribute_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=247;
+  MODIFY `attribute_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=259;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1739,19 +1754,19 @@ ALTER TABLE `purchase_histories`
 -- AUTO_INCREMENT for table `sales_items`
 --
 ALTER TABLE `sales_items`
-  MODIFY `item_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `item_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `sales_orders`
 --
 ALTER TABLE `sales_orders`
-  MODIFY `sales_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `sales_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `stock_movements`
 --
 ALTER TABLE `stock_movements`
-  MODIFY `movement_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `movement_id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `suppliers`
