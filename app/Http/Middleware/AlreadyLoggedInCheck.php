@@ -16,10 +16,10 @@ class AlreadyLoggedInCheck
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->session()->has('isLoggedIn')) {
-           
+        // Keep session key consistent with AuthController (loginId/loginRole)
+        if ($request->session()->has('loginId')) {
             if ($request->is('login') || $request->is('/')) {
-                return redirect()->back();
+                return redirect('/dashboard');
             }
         }
         return $next($request);
