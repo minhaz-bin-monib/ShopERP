@@ -11,6 +11,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SalesController;
+use App\Http\Controllers\StockReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,4 +144,10 @@ Route::group(['prefix' => 'sales','middleware' => ['isLoggedIn','roleCheck:Admin
     Route::post('create', [SalesController::class, 'store']);
     Route::get('list', [SalesController::class, 'show']);
     Route::get('print/{id}', [SalesController::class, 'print']);
+});
+
+// ------------------------- Stock Report Routes ------------------------
+
+Route::group(['prefix' => 'stock-report','middleware' => ['isLoggedIn','roleCheck:Admin,Assistant']], function () {
+    Route::get('category-wise', [StockReportController::class, 'categoryWise']);
 });

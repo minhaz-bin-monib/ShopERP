@@ -173,6 +173,7 @@
                     $isCategory = Request::is('category*');
                     $isPurchase = Request::is('purchase*');
                     $isSales = Request::is('sales*');
+                    $isStockReport = Request::is('stock-report*');
                 @endphp
                 @if (Session::get('loginRole') == 'Admin' || Session::get('loginRole') == 'Assistant')
                     <ul class="list-unstyled components mb-5" id="sidebar-accordion">
@@ -209,6 +210,15 @@
                                 </li>
                                 <li>
                                     <a href="{{ url('/product/list') }}">Products</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#stockReportSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isStockReport ? 'true' : 'false' }}"
+                                class="dropdown-toggle {{ $isStockReport ? 'active' : '' }}">Stock Report</a>
+                            <ul class="collapse list-unstyled {{ $isStockReport ? 'show' : '' }}" id="stockReportSubmenu" data-bs-parent="#sidebar-accordion">
+                                <li>
+                                    <a href="{{ url('/stock-report/category-wise') }}">Category Wise Stock</a>
                                 </li>
                             </ul>
                         </li>
