@@ -174,7 +174,7 @@
                     $isPurchase = Request::is('purchase*');
                     $isSales = Request::is('sales*');
                 @endphp
-                @if (Session::get('loginRole') == 'Admin' || Session::get('loginRole') == 'Operator')
+                @if (Session::get('loginRole') == 'Admin' || Session::get('loginRole') == 'Assistant')
                     <ul class="list-unstyled components mb-5" id="sidebar-accordion">
                         <li>
                             <a href="#salesSubmenu" data-bs-toggle="collapse" aria-expanded="{{ $isSales ? 'true' : 'false' }}"
