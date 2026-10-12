@@ -11,11 +11,22 @@
         .stock-report-header h2 { margin: 0; font-weight: 700; color: #202a3a; }
         .stock-report-header p { margin: 5px 0 0; color: #6c757d; }
         .stock-filter-card, .stock-category-card { background: #fff; border: 1px solid #e5e8ec; border-radius: 10px; box-shadow: 0 3px 12px rgba(20, 37, 63, .05); }
-        .stock-filter-card { padding: 18px; margin-bottom: 22px; }
+        .stock-filter-card { padding: 12px 14px; margin-bottom: 12px; }
+        .stock-overview { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+        .stock-overview-card { display: flex; align-items: center; gap: 7px; padding: 8px 12px; border: 1px solid #e5e8ec; border-radius: 8px; background: #fff; box-shadow: 0 2px 7px rgba(20, 37, 63, .04); }
+        .stock-overview-card span { color: #667085; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .stock-overview-card strong { color: #1f2937; font-size: 17px; line-height: 1; }
+        .stock-overview-card.warning strong { color: #9a6400; }
+        .stock-overview-card.danger strong { color: #b42318; }
         .stock-filter-card label { color: #475467; font-size: 13px; font-weight: 600; }
         .stock-filter-card .form-control, .stock-filter-card .form-select { min-height: 38px; }
         .stock-category-card { margin-bottom: 20px; overflow: hidden; }
         .stock-category-head { padding: 16px 20px; display: flex; justify-content: space-between; gap: 16px; align-items: center; background: #f8fafc; border-bottom: 1px solid #e5e8ec; }
+        .stock-category-card summary { cursor: pointer; list-style: none; }
+        .stock-category-card summary::-webkit-details-marker { display: none; }
+        .stock-category-card summary::after { content: '−'; color: #475467; font-size: 22px; font-weight: 400; }
+        .stock-category-card:not([open]) summary { border-bottom: 0; }
+        .stock-category-card:not([open]) summary::after { content: '+'; }
         .stock-category-head h4 { margin: 0; color: #23395d; font-weight: 700; }
         .stock-summary { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 18px; color: #586474; font-size: 13px; }
         .stock-summary strong { color: #1f2937; }
@@ -29,7 +40,7 @@
         .stock-low { color: #975d00; background: #fff4d6; }
         .stock-out { color: #a63232; background: #ffebeb; }
         .stock-empty { padding: 52px 20px; text-align: center; color: #6c757d; background: #fff; border: 1px dashed #ccd4dd; border-radius: 10px; }
-        @media (max-width: 768px) { .stock-report-header, .stock-category-head { align-items: flex-start; flex-direction: column; } .stock-summary { justify-content: flex-start; } }
+        @media (max-width: 768px) { .stock-overview-card { flex: 1 1 calc(50% - 8px); justify-content: space-between; } .stock-report-header, .stock-category-head { align-items: flex-start; flex-direction: column; } .stock-summary { justify-content: flex-start; } }
     </style>
 
     @php
@@ -78,20 +89,26 @@
             </div>
         </form>
 
+        <div class="stock-overview">
+            <div class="stock-overview-card"><span>Products Shown</span><strong>{{ $stockSummary->product_count }}</strong></div>
+            <div class="stock-overview-card"><span>Available Quantity</span><strong>{{ $formatQty($stockSummary->total_stock) }}</strong></div>
+            <div class="stock-overview-card warning"><span>Low Stock Products</span><strong>{{ $stockSummary->low_stock_count }}</strong></div>
+            <div class="stock-overview-card danger"><span>Out of Stock Products</span><strong>{{ $stockSummary->out_of_stock_count }}</strong></div>
+        </div>
+
         @forelse ($categoryReports as $report)
-            <section class="stock-category-card">
-                <div class="stock-category-head">
+            <details class="stock-category-card" open>
+                <summary class="stock-category-head">
                     <h4>{{ $report->name }}</h4>
                     <div class="stock-summary">
                         <span><strong>{{ $report->product_count }}</strong> Products</span>
-                        <span><strong>{{ $formatQty($report->total_stock) }}</strong> Total Quantity</span>
-                        <span>Stock Value: <strong>{{ number_format($report->stock_value, 2) }}</strong></span>
+                        <span class="{{ $report->total_stock <= 0 ? 'text-danger' : '' }}"><strong>{{ $formatQty($report->total_stock) }}</strong> Total Quantity</span>
                     </div>
-                </div>
+                </summary>
                 <div class="table-responsive">
                     <table class="table stock-table">
                         <thead>
-                            <tr><th>Product</th><th>Code</th><th>Unit</th><th class="text-end">Available Stock</th><th class="text-end">Purchase Price</th><th class="text-end">Selling Price</th><th class="text-end">Stock Value</th><th>Status</th></tr>
+                            <tr><th>Product</th><th>Code</th><th>Unit</th><th class="text-end">Available Stock</th><th class="text-end">Purchase Price</th><th class="text-end">Selling Price</th><th>Status</th></tr>
                         </thead>
                         <tbody>
                             @foreach ($report->products as $product)
@@ -106,14 +123,13 @@
                                     <td class="text-end stock-number">{{ $formatQty($product->current_stock) }}</td>
                                     <td class="text-end">{{ number_format($product->purchase_price ?? 0, 2) }}</td>
                                     <td class="text-end">{{ number_format($product->selling_price ?? 0, 2) }}</td>
-                                    <td class="text-end stock-number">{{ number_format($product->current_stock * ($product->purchase_price ?? 0), 2) }}</td>
                                     <td><span class="stock-status {{ $isOut ? 'stock-out' : ($isLow ? 'stock-low' : 'stock-in') }}">{{ $isOut ? 'Out of Stock' : ($isLow ? 'Low Stock' : 'In Stock') }}</span></td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            </section>
+            </details>
         @empty
             <div class="stock-empty">No products match the selected filters.</div>
         @endforelse

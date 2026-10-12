@@ -56,22 +56,34 @@ class StockReportController extends Controller
         }
 
         if (($filters['stock_status'] ?? null) === 'in_stock') {
-            $products->having('current_stock', '>', 0);
+            $products->whereRaw('COALESCE(stock_totals.current_stock, 0) > 0');
         }
 
         if (($filters['stock_status'] ?? null) === 'low_stock') {
-            $products->having('current_stock', '>', 0)
-                ->havingRaw('reminder_low IS NOT NULL AND current_stock <= reminder_low');
+            $products->whereRaw('COALESCE(stock_totals.current_stock, 0) > 0')
+                ->whereNotNull('products.reminder_low')
+                ->whereRaw('COALESCE(stock_totals.current_stock, 0) <= products.reminder_low');
         }
 
         if (($filters['stock_status'] ?? null) === 'out_of_stock') {
-            $products->having('current_stock', '<=', 0);
+            $products->whereRaw('COALESCE(stock_totals.current_stock, 0) <= 0');
         }
 
         $products = $products
             ->orderByRaw('COALESCE(categories.category_name, \'Uncategorized\')')
             ->orderBy('products.product_name')
             ->get();
+
+        $stockSummary = (object) [
+            'product_count' => $products->count(),
+            'total_stock' => $products->sum('current_stock'),
+            'low_stock_count' => $products->filter(
+                fn ($product) => $product->current_stock > 0
+                    && $product->reminder_low !== null
+                    && $product->current_stock <= $product->reminder_low
+            )->count(),
+            'out_of_stock_count' => $products->filter(fn ($product) => $product->current_stock <= 0)->count(),
+        ];
 
         $categoryReports = $products
             ->groupBy(fn ($product) => $product->category_id ? "category-{$product->category_id}" : 'uncategorized')
@@ -86,12 +98,19 @@ class StockReportController extends Controller
                     ),
                 ];
             })
+            ->sort(function ($left, $right) {
+                $stockComparison = $right->total_stock <=> $left->total_stock;
+
+                return $stockComparison !== 0
+                    ? $stockComparison
+                    : strnatcasecmp($left->name, $right->name);
+            })
             ->values();
 
         $categories = Category::where('action_type', '!=', 'DELETE')
             ->orderBy('category_name')
             ->get();
 
-        return view('stock.categoryWise', compact('categoryReports', 'categories', 'filters'));
+        return view('stock.categoryWise', compact('categoryReports', 'categories', 'filters', 'stockSummary'));
     }
 }
