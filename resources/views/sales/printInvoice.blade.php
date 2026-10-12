@@ -205,7 +205,7 @@
         .invoice-footer {
             text-align: center;
             font-size: 11px;
-            color: var(--ink-soft);
+            color: #000000;
             margin-top: 6px;
             line-height: 1.4;
         }
@@ -283,6 +283,11 @@
             .in-word-line strong,
             .contact-line strong {
                 font-weight: 700;
+            }
+
+            .invoice-footer,
+            .invoice-footer * {
+                color: #000000 !important;
             }
         }
     </style>
